@@ -855,6 +855,8 @@ svg.lgt{max-height:none;aspect-ratio:1;margin:0 0 10px;cursor:crosshair;touch-ac
 .msnow{margin-top:12px}
 #msSeek{width:100%;height:44px;accent-color:var(--acc)}
 .mstime{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.eropen{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.erform{margin-top:10px;padding-top:10px;border-top:1px solid var(--line-hi)}
 .msadd{display:flex;align-items:center;justify-content:center;margin-bottom:8px}
 .faqt{width:100%;border-collapse:collapse}
 .faqt td{padding:9px 4px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px;line-height:1.5;color:var(--fg)}
@@ -1136,7 +1138,7 @@ function parseNum(str){
 }
 /*ENGINE-END*/
 
-const APP_VERSION='3.3.0';
+const APP_VERSION='3.4.0';
 const DB_NAME='ballistik308',DB_VERSION=1,SCHEMA=1;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function fmt(v,d=1){if(v==null||!Number.isFinite(v))return '–';let s=v.toFixed(d);if(/^-0(\.0*)?$/.test(s))s=s.slice(1);return s.replace('.',',');}
@@ -2006,7 +2008,7 @@ function buildXlsx(sheets){
   return zipStore(files);
 }
 /* ---------- Mindset: lydspor ---------- */
-const MS={repo:[],own:[],cur:null,url:null,offline:{},loaded:false};
+const MS={repo:[],own:[],cur:null,url:null,offline:{},loaded:false,edit:null};
 const MS_CACHE='ballistik308-mindset';
 function msTime(t){if(!Number.isFinite(t))return '–';t=Math.round(t);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0');}
 async function msLoad(){
@@ -2029,8 +2031,16 @@ function renderMindset(){
     return `<div class="msrow${on?' on':''}"><button class="btn mspl" data-ms="${esc(t.id)}" aria-label="${playing?'Pause':'Afspil'}">${playing?'❚❚':'▶'}</button>
       <div class="msinfo"><b>${esc(t.name)}</b><span>${t.dur?msTime(t.dur)+' · ':''}${st}</span></div>${t.own?`<button class="btn msdel" data-del="${esc(t.id)}" aria-label="Slet">✕</button>`:''}</div>`;};
   const cur=all.find(t=>t.id===MS.cur);
+  const links=S.settings.erLinks||[];
+  const erRow=l=>MS.edit===l.id?erForm(l):`<div class="msrow"><a class="btn mspl eropen" href="${esc(erHref(l.url))}" target="_blank" rel="noopener" aria-label="Åbn i ElevenReader">↗</a>
+      <div class="msinfo"><b>${esc(l.name)}</b><span>${l.url?'direkte link':'åbner ElevenReader'}</span></div><button class="btn msdel" data-eredit="${esc(l.id)}" aria-label="Ret">✎</button></div>`;
   $('#msBox').innerHTML=`
-  <div class="card"><h2>Visualisering</h2>
+  <div class="card"><h2>ElevenReader</h2>
+    ${links.length?links.map(erRow).join(''):'<p>Ingen genveje endnu.</p>'}
+    ${MS.edit==='new'?erForm(null):'<button class="btn wide" id="erAdd" style="margin-top:10px">Tilføj genvej</button>'}
+    <div class="hint">Kræver ElevenReader på telefonen og at dokumentet er hentet til offline, før du står uden dækning. Uden link åbnes ElevenReader, og du vælger selv dokumentet.</div>
+  </div>
+  <div class="card"><h2>Lydspor i appen</h2>
     ${all.length?all.map(row).join(''):'<p>Ingen lydspor endnu.</p>'}
     ${cur?`<div class="msnow"><div class="lbl">${esc(cur.name)}</div><input type="range" id="msSeek" min="0" max="1000" value="0" aria-label="Position"><div class="mstime"><span id="msPos">0:00</span><span id="msDur">${msTime(cur.dur)}</span></div>
       <div class="row" style="margin:6px 0 0"><button class="btn" id="msBack">−15 s</button><button class="btn" id="msFwd">+15 s</button></div></div>`:''}
@@ -2040,10 +2050,33 @@ function renderMindset(){
     <div class="hint">Lydspor i repoets mappe mindset/ hentes automatisk og virker offline. Egne spor gemmes kun i appen på denne telefon og kommer ikke med i backuppen — behold originalen i Arkiver.</div>
   </div>`;
   $$('#msBox [data-ms]').forEach(b=>b.onclick=()=>msToggle(b.dataset.ms));
+  if($('#erAdd'))$('#erAdd').onclick=()=>{MS.edit='new';renderMindset();setTimeout(()=>{const n=$('#erName');if(n)n.focus();},50);};
+  $$('#msBox [data-eredit]').forEach(b=>b.onclick=()=>{MS.edit=b.dataset.eredit;renderMindset();});
+  if($('#erSave'))$('#erSave').onclick=erSave;
+  if($('#erCancel'))$('#erCancel').onclick=()=>{MS.edit=null;renderMindset();};
+  if($('#erDel'))$('#erDel').onclick=erDelete;
   $$('#msBox [data-del]').forEach(b=>b.onclick=()=>msDelete(b.dataset.del));
   $('#msFile').onchange=e=>msImport(e.target.files[0]);
   if(cur){$('#msSeek').oninput=e=>{if(Number.isFinite(a.duration))a.currentTime=e.target.value/1000*a.duration;};
     $('#msBack').onclick=()=>{a.currentTime=Math.max(0,a.currentTime-15);};$('#msFwd').onclick=()=>{if(Number.isFinite(a.duration))a.currentTime=Math.min(a.duration,a.currentTime+15);};msTick();}
+}
+const ER_APP='https://apps.apple.com/app/id6479373050';
+function erHref(u){return u||ER_APP;}
+function erForm(l){return `<div class="erform"><div class="field"><label for="erName">Navn</label><input class="txt" id="erName" maxlength="60" value="${esc(l?l.name:'')}" placeholder="fx Før 700 m-serien"></div>
+  <div class="field"><label for="erUrl">Link fra ElevenReader <span class="u">valgfrit</span></label><input class="txt" id="erUrl" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" value="${esc(l?l.url:'')}" placeholder="https://…"></div>
+  <div class="row"><button class="btn pri" id="erSave">Gem</button><button class="btn" id="erCancel">Fortryd</button>${l?'<button class="btn danger" id="erDel">Slet</button>':''}</div></div>`;}
+function erCleanUrl(u){u=(u||'').trim();if(!u)return '';const m=u.match(/[a-z][a-z0-9+.-]*:\/\/\S+/i);if(!m)return null;u=m[0];return /^(javascript|data|vbscript|file):/i.test(u)?null:u;}
+async function erSave(){
+  const name=$('#erName').value.trim(),url=erCleanUrl($('#erUrl').value);
+  if(!name){toast('Skriv et navn',true);return;}
+  if(url===null){toast('Linket kan ikke bruges — indsæt hele linket fra ElevenReaders Del-menu',true);return;}
+  const L=(S.settings.erLinks||[]).slice();
+  if(MS.edit==='new')L.push({id:uid(),name,url});else{const i=L.findIndex(x=>x.id===MS.edit);if(i>=0)L[i]={...L[i],name,url};}
+  S.settings.erLinks=L;if(await saveSettings()){MS.edit=null;toast('Genvej gemt');renderMindset();}
+}
+async function erDelete(){
+  const L=S.settings.erLinks||[],l=L.find(x=>x.id===MS.edit);if(!l||!confirm('Slet genvejen "'+l.name+'"?'))return;
+  S.settings.erLinks=L.filter(x=>x.id!==l.id);if(await saveSettings()){MS.edit=null;renderMindset();}
 }
 function msTick(){const a=$('#msAudio'),s=$('#msSeek');if(!s)return;const d=a.duration;$('#msPos').textContent=msTime(a.currentTime||0);if(Number.isFinite(d)){$('#msDur').textContent=msTime(d);s.value=Math.round((a.currentTime||0)/d*1000);}}
 async function msBlob(t){
