@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Ballistik">
+<meta name="apple-mobile-web-app-title" content="Shootingverse">
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" id="appleIcon" href="data:,">
-<title>Ballistik .308</title>
+<title>The Shootingverse</title>
 <style id="pageStyle">@page{size:105mm 148mm;margin:5mm}</style>
 <style>
 /* required styles */
@@ -699,7 +699,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 var(--mono);-webkit-text-size-adjust:100%}
 body{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent 0 3px,var(--scan) 3px 4px)}
-header{position:sticky;top:0;z-index:8;display:flex;align-items:center;gap:10px;padding:calc(6px + env(safe-area-inset-top)) 12px 8px;background:linear-gradient(90deg,#1a2e20,#0f1a13);border-bottom:2px solid var(--acc);box-shadow:0 6px 24px rgba(0,0,0,.6)}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:calc(6px + env(safe-area-inset-top)) 12px 8px;background:linear-gradient(90deg,#1a2e20,#0f1a13);border-bottom:2px solid var(--acc);box-shadow:0 6px 24px rgba(0,0,0,.6)}
 [data-theme=night] header{background:#0a0000}
 header h1{flex:1;margin:0;min-width:0;font:800 21px/1.05 var(--head);letter-spacing:5px;text-transform:uppercase;color:var(--acc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 header .prof{display:block;font:400 12px/1.3 var(--mono);letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis}
@@ -743,6 +743,8 @@ select{background-image:linear-gradient(45deg,transparent 50%,var(--acc) 50%),li
 #menuBtn{font-size:28px}
 #menu{position:fixed;inset:0;z-index:35;display:none;flex-direction:column;background:var(--bg);padding:calc(8px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));overflow-y:auto}
 #menu.on{display:flex}
+header,#menu,#quick,#banner,#toast{-webkit-transform:translateZ(0);transform:translateZ(0)}
+body.mopen #mapBox{visibility:hidden}
 .menu-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .menu-top h2{flex:1;margin:0;font:800 21px/1 var(--head);letter-spacing:5px;text-transform:uppercase;color:var(--acc)}
 .mgrp{margin:12px 0 4px;font:700 12px/1 var(--head);letter-spacing:3px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line-hi);padding-bottom:6px}
@@ -800,7 +802,7 @@ svg.ret{width:100%;height:auto;max-height:62vh;display:block;background:var(--pa
 #toast.on{display:block}#toast.e{border-color:var(--bad);color:var(--bad);background:var(--panel)}
 
 /* Kort */
-#mapBox{position:relative;height:min(58vh,560px);margin:0 0 12px;border:1.5px solid var(--line-hi);border-top:3px solid var(--acc)}
+#mapBox{position:relative;z-index:0;isolation:isolate;height:min(58vh,560px);margin:0 0 12px;border:1.5px solid var(--line-hi);border-top:3px solid var(--acc)}
 #map{position:absolute;inset:0;background:#0a0e0d}
 [data-theme=night] #map .leaflet-tile-pane{filter:grayscale(1) sepia(1) hue-rotate(-50deg) saturate(5) brightness(.42)}
 [data-theme=night] #map .leaflet-overlay-pane,[data-theme=night] #map .leaflet-marker-pane{filter:grayscale(1) sepia(1) hue-rotate(-50deg) saturate(6)}
@@ -970,7 +972,7 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
   </section>
 </main>
 <div id="menu" role="dialog" aria-label="Menu">
-  <div class="menu-top"><h2>Ballistik 308</h2><button class="iconbtn" id="menuClose" aria-label="Luk menu">✕</button></div>
+  <div class="menu-top"><h2>Menu</h2><button class="iconbtn" id="menuClose" aria-label="Luk menu">✕</button></div>
   <div class="mgrp">Skyd</div>
   <button class="mitem" data-go="v-solve">Løsning</button>
   <button class="mitem" data-go="v-dope">Skydetabel</button>
@@ -1139,7 +1141,7 @@ function parseNum(str){
 }
 /*ENGINE-END*/
 
-const APP_VERSION='3.5.0';
+const APP_VERSION='3.6.0';
 const DB_NAME='ballistik308',DB_VERSION=1,SCHEMA=1;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function fmt(v,d=1){if(v==null||!Number.isFinite(v))return '–';let s=v.toFixed(d);if(/^-0(\.0*)?$/.test(s))s=s.slice(1);return s.replace('.',',');}
@@ -1321,8 +1323,8 @@ function go(id){
 const TAB_DEFAULT={skyd:'v-solve',gear:'v-set',backup:'backup',faq:'faq',train:'train',kort:'kort',vejr:'vejr',log:'log',mindset:'mindset'};
 function showTab(tab){if(PAGES[curPage][0]!==tab)go(TAB_DEFAULT[tab]);}
 function showView(bar,v){go(v);}
-function openMenu(){updateBackupBadge();$$('#menu .mitem').forEach(b=>b.classList.toggle('on',b.dataset.go===curPage));$('#menu').classList.add('on');}
-function closeMenu(){$('#menu').classList.remove('on');}
+function openMenu(){updateBackupBadge();$$('#menu .mitem').forEach(b=>b.classList.toggle('on',b.dataset.go===curPage));$('#menu').classList.add('on');document.body.classList.add('mopen');}
+function closeMenu(){$('#menu').classList.remove('on');document.body.classList.remove('mopen');}
 $('#menuBtn').onclick=openMenu;
 $('#menuClose').onclick=closeMenu;
 $('#menu').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go);});
@@ -2177,7 +2179,7 @@ async function msToggle(id){
   let b;try{b=await msBlob(t);}catch(e){toast(navigator.onLine?'Lydsporet kunne ikke hentes':'Lydsporet er ikke hentet endnu — åbn Mindset med net én gang',true);return;}
   if(!b){toast('Lydsporet findes ikke længere',true);return;}
   a.pause();if(MS.url)URL.revokeObjectURL(MS.url);MS.url=URL.createObjectURL(b);a.src=MS.url;MS.cur=id;
-  if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'Ballistik 308 · Mindset'});}catch(e){}
+  if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:'The Shootingverse · Mindset'});}catch(e){}
   try{await a.play();}catch(e){toast('Afspilning blev blokeret — tryk igen',true);}
   renderMindset();
 }
@@ -2208,7 +2210,7 @@ async function exportBackup(){
   for(const k of BK_STORES)data.stores[k]=await dbAll(k);
   const P=data.stores.profiles,shots=data.stores.shotlog.filter(r=>r.type==='shot').sort((a,b)=>a.ts-b.ts),tr=data.stores.traininglog.filter(r=>r.type==='hold').sort((a,b)=>a.ts-b.ts);
   const sheets=[];
-  sheets.push({name:'Oversigt',widths:[28,40],rows:[['Ballistik 308 — backup',''],['Dato',dtx(data.ts)],['App-version',APP_VERSION],['Ammunition',P.length],['Skud i skudlog',shots.length],['Forsøg i holdtræning',tr.length],['',''],['Gendan','Åbn appen → Backup → Gendan fra fil, og vælg denne fil.'],['Bemærk','Fanen _backup indeholder alle data og må ikke ændres.']]});
+  sheets.push({name:'Oversigt',widths:[28,40],rows:[['The Shootingverse — backup',''],['Dato',dtx(data.ts)],['App-version',APP_VERSION],['Ammunition',P.length],['Skud i skudlog',shots.length],['Forsøg i holdtræning',tr.length],['',''],['Gendan','Åbn appen → Backup → Gendan fra fil, og vælg denne fil.'],['Bemærk','Fanen _backup indeholder alle data og må ikke ændres.']]});
   sheets.push({name:'Ammunition',widths:[30,12,10,10,10,12,10,10,12,12,12],rows:[['Ammunition','Lot','Vægt (grain)','G7-BK','V₀ (m/s)','V₀ målt ved °C','Nul (m)','Sigtehøjde (cm)','Klikfaktor','Æske V₀','Verificeret'],
     ...P.map(p=>[p.name,p.lot||'',p.weight,p.bc,p.mv,p.mvT??'',p.zeroRange,p.sightH,p.clickFactor,p.boxMv??'',p.verified?'ja':'nej'])]});
   sheets.push({name:'Skudlog',widths:[17,26,10,9,7,8,20,10,10,10,10,10,10,8,7,30],rows:[['Dato','Ammunition','Lot','Afstand (m)','°C','hPa','Vindkald','Elev drejet','Vind holdt','Kald op','Kald side','Træf op','Træf side','Koldt','Lyddæmper','Note'],
@@ -2219,10 +2221,10 @@ async function exportBackup(){
     sheets.push({name:'Skydetabel',widths:[10,10,10,14,8],rows:[['Afstand (m)','Elev (mil)','1 m/s (mil)','Gaffel (mil)','Mach'],...rows.map(r=>r.out?[r.x,'uden for rækkevidde']:[r.x,r2(r.elevDial),r2(Math.abs(r.wind1)),forkTxt(r.fMin,r.fMax),r2(r.mach)]),[],[`${ctx.pr.name}${ctx.pr.lot?' · lot '+ctx.pr.lot:''} · V₀ ${fmt(ctx.mv,0)} · ${fmt(ctx.cond.T,0)} °C · ${fmt(ctx.cond.P,0)} hPa`]]});}
   const json=JSON.stringify(data),chunks=[];for(let i=0;i<json.length;i+=30000)chunks.push([json.slice(i,i+30000)]);
   sheets.push({name:'_backup',hidden:true,rows:[['ballistik308-backup-v1'],...chunks]});
-  const blob=buildXlsx(sheets),d=new Date(),fname=`ballistik308-backup-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.xlsx`;
+  const blob=buildXlsx(sheets),d=new Date(),fname=`shootingverse-backup-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.xlsx`;
   const file=new File([blob],fname,{type:blob.type});
   let shared=false;
-  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Ballistik 308 backup'});shared=true;}}
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'The Shootingverse backup'});shared=true;}}
   catch(e){if(e&&e.name==='AbortError'){toast('Backup ikke gemt');return;}}
   if(!shared){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);}
   S.settings.lastBackup=data.ts;S.settings.lastBackupCounts={shots:shots.length,tr:tr.length,prof:P.length};await saveSettings();
@@ -2253,7 +2255,7 @@ async function dbClear(store){try{await tx(store,'readwrite',s=>s.clear());retur
 async function importBackup(file){
   let data;
   try{data=await readBackupFile(file);}catch(e){toast('Kunne ikke læse filen: '+e.message,true);return;}
-  if(!data||data.app!=='ballistik308'||!data.stores){toast('Filen er ikke en backup fra Ballistik 308',true);return;}
+  if(!data||data.app!=='ballistik308'||!data.stores){toast('Filen er ikke en backup fra The Shootingverse',true);return;}
   const m=migrateBackup(data),n=k=>(m.stores[k]||[]).length;
   const sh=(m.stores.shotlog||[]).filter(r=>r.type==='shot').length,tr=(m.stores.traininglog||[]).filter(r=>r.type==='hold').length;
   if(!confirm(`Gendan backup fra ${dtx(data.ts)}?\n\n${n('profiles')} ammunition · ${sh} skud · ${tr} træningsforsøg\n\nAlle nuværende data på telefonen erstattes.`))return;
