@@ -855,6 +855,7 @@ svg.lgt{max-height:none;aspect-ratio:1;margin:0 0 10px;cursor:crosshair;touch-ac
 .msnow{margin-top:12px}
 #msSeek{width:100%;height:44px;accent-color:var(--acc)}
 .mstime{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.wxt th:first-child{text-align:left}.wxt td:first-child{font:18px/1.2 var(--mono);letter-spacing:0;color:var(--muted)}.wxt td{font-size:18px}
 .eropen{display:flex;align-items:center;justify-content:center;text-decoration:none}
 .erform{margin-top:10px;padding-top:10px;border-top:1px solid var(--line-hi)}
 .msadd{display:flex;align-items:center;justify-content:center;margin-bottom:8px}
@@ -921,7 +922,7 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
     </div>
     <div class="view" id="v-prof"></div>
   </section>
-  <section class="tab" id="tab-vejr"><div class="card"><h2>Vejr &amp; Lys</h2><p>Open-Meteo-vejr, nedskaleret modelvind som reference, sol, måne og tusmørke kommer i en senere version. Atmosfæren tastes indtil da manuelt under Løsning.</p></div></section>
+  <section class="tab" id="tab-vejr"><div id="wxBox"></div></section>
   <section class="tab" id="tab-kort">
     <div id="mapBox"><div id="map"></div><div id="mapTools"></div><div id="mapHint"></div></div>
     <div class="card" id="mapRead"></div>
@@ -977,7 +978,7 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
   <button class="mitem" data-go="v-prof">Ammunition</button>
   <div class="mgrp">Felt</div>
   <button class="mitem" data-go="kort">Kort</button>
-  <button class="mitem" data-go="vejr">Vejr &amp; Lys <small>senere fase</small></button>
+  <button class="mitem" data-go="vejr">Vejr &amp; Lys</button>
   <div class="mgrp">Træning</div>
   <button class="mitem" data-go="train">Holdtræning</button>
   <button class="mitem" data-go="log">Skudlog</button>
@@ -1138,7 +1139,7 @@ function parseNum(str){
 }
 /*ENGINE-END*/
 
-const APP_VERSION='3.4.0';
+const APP_VERSION='3.5.0';
 const DB_NAME='ballistik308',DB_VERSION=1,SCHEMA=1;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function fmt(v,d=1){if(v==null||!Number.isFinite(v))return '–';let s=v.toFixed(d);if(/^-0(\.0*)?$/.test(s))s=s.slice(1);return s.replace('.',',');}
@@ -1314,7 +1315,7 @@ function go(id){
   closeMenu();
   if(id==='v-dope')renderDope();if(id==='v-hold')renderHold();if(id==='v-prof')renderProfiles();
   if(id!=='train')trStop();if(id==='train')showTrain();if(id==='log')showLog();if(id==='backup')renderBackup();
-  if(id==='v-set')renderSettings();if(id==='kort')showMap();if(id==='mindset')showMindset();
+  if(id==='v-set')renderSettings();if(id==='kort')showMap();if(id==='mindset')showMindset();if(id==='vejr')renderWx();
   window.scrollTo(0,0);
 }
 const TAB_DEFAULT={skyd:'v-solve',gear:'v-set',backup:'backup',faq:'faq',train:'train',kort:'kort',vejr:'vejr',log:'log',mindset:'mindset'};
@@ -1351,10 +1352,13 @@ function renderSolveForm(){
   </div>
   <div class="card"><h2>Atmosfære</h2>
     <div class="grid2">${nf('s_T','sess','Temperatur','°C',{min:-40,max:50,step:1,dec:0},s.T)}${nf('s_P','sess','Stationstryk','hPa',{min:600,max:1100,step:1,dec:0},s.P)}</div>
+    <button class="btn wide" id="wxSolve" style="margin-bottom:6px" ${WX.busy?'disabled':''}>${WX.busy?'Henter vejr …':'Hent temperatur og tryk (GPS)'}</button>
+    <div class="meta" style="margin:0 0 10px">${wxLine()}</div>
     <button class="btn chk${s.supp?' on':''}" id="suppTgl">${s.supp?'✓ Lyddæmper monteret':'Lyddæmper ikke monteret'}</button>
   </div>`;
   $('#selProfile').onchange=e=>{if(e.target.value==='__new'){openNewAmmo();return;}S.activeId=e.target.value;saveSettings();renderSolveForm();compute();};
   $('#windSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.session.windMode=b.dataset.m;saveSession();renderSolveForm();compute();};
+  $('#wxSolve').onclick=()=>wxFetch(true);
   $('#suppTgl').onclick=()=>{S.session.supp=!S.session.supp;saveSession();renderSolveForm();compute();};
   $$('#dirSeg button').forEach(b=>b.onclick=()=>{S.session.dirU=+b.dataset.u;saveSession();renderSolveForm();compute();});
 }
@@ -2007,6 +2011,89 @@ function buildXlsx(sheets){
   sheets.forEach((s,i)=>files.push({name:`xl/worksheets/sheet${i+1}.xml`,data:sheetXml(s.rows,s.widths)}));
   return zipStore(files);
 }
+/* ---------- Vejr & Lys (Open-Meteo på GPS-position) ---------- */
+const WX={busy:false,err:null};
+const WX_RED=0.67; // 10 m-modelvind → 1–2 m over åben mark (logprofil, ruhed 3 cm)
+const KOMPAS=['N','NNØ','NØ','ØNØ','Ø','ØSØ','SØ','SSØ','S','SSV','SV','VSV','V','VNV','NV','NNV'];
+function kompas(g){return KOMPAS[Math.round(((g%360)+360)%360/22.5)%16];}
+function wxAgeMin(w){return w?Math.round((Date.now()-w.ts)/60000):null;}
+function wxAgeTxt(w){const a=wxAgeMin(w);if(a==null)return '';return a<1?'lige nu':a<60?a+' min siden':a<1440?Math.floor(a/60)+' t '+(a%60)+' min siden':Math.floor(a/1440)+' døgn siden';}
+function hhmm(iso){return iso?iso.slice(11,16):'–';}
+function sessShot(){const s=S.session;if(!s.stade||!s.maal)return null;return {d:afstandM(s.stade,s.maal),b:pejling(s.stade,s.maal)};}
+function wxLine(){const w=S.session.wx;if(!w)return 'Henter vejret fra Open-Meteo på din GPS-position.';const c=w.cur;
+  return `Open-Meteo ${wxAgeTxt(w)}${wxAgeMin(w)>180?' — gammelt':''}: ${fmt(c.T,1)} °C · ${fmt(c.P,0)} hPa · vind 10 m ${fmt(c.ws,1)} (stød ${fmt(c.wg,1)}) m/s fra ${grVis(c.wd)}`;}
+function wxPos(){return new Promise(res=>{
+  if(!navigator.geolocation){res(null);return;}
+  navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,src:'gps'}),e=>{WX.err=gpsErr(e);res(null);},{enableHighAccuracy:false,maximumAge:120000,timeout:15000});});}
+async function wxFetch(toSolve){
+  if(WX.busy)return;WX.busy=true;WX.err=null;wxRerender();
+  try{
+    let pos=await wxPos();
+    if(!pos){const st=S.session.stade;pos=st?{lat:st[0],lon:st[1],src:'stade'}:{lat:S.settings.lat,lon:S.settings.lon,src:'start'};}
+    if(!Number.isFinite(pos.lat)||!Number.isFinite(pos.lon))throw new Error('Ingen position');
+    const la=pos.lat.toFixed(3),lo=pos.lon.toFixed(3);
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=sunrise,sunset&wind_speed_unit=ms&timezone=auto&forecast_days=2`;
+    const r=await fetch(url);if(!r.ok)throw new Error('Open-Meteo svarede '+r.status);
+    const j=await r.json(),c=j.current||{};
+    const cur={time:c.time,T:c.temperature_2m,P:c.surface_pressure,ws:c.wind_speed_10m,wd:c.wind_direction_10m,wg:c.wind_gusts_10m};
+    if(![cur.T,cur.P,cur.ws,cur.wd].every(Number.isFinite))throw new Error('Ufuldstændige vejrdata');
+    const h=j.hourly||{},t=h.time||[];let i0=t.findIndex(x=>x>=String(c.time).slice(0,13)+':00');if(i0<0)i0=0;
+    const hours=[];for(let i=i0+1;i<Math.min(t.length,i0+7);i++)hours.push({time:t[i],T:h.temperature_2m[i],ws:h.wind_speed_10m[i],wd:h.wind_direction_10m[i],wg:h.wind_gusts_10m[i]});
+    const d=j.daily||{};
+    S.session.wx={ts:Date.now(),lat:+la,lon:+lo,src:pos.src,acc:pos.acc||null,elev:j.elevation,cur,hours,sun:{rise:(d.sunrise||[])[0],set:(d.sunset||[])[0]}};
+    WX.err=null;
+    if(toSolve)wxApplyAtmos(true);else saveSession();
+  }catch(e){WX.err=(navigator.onLine===false?'Ingen netforbindelse — ':'')+'Vejret kunne ikke hentes'+(e&&e.message&&!(e instanceof TypeError)?' ('+e.message+')':' — tjek forbindelsen');toast(WX.err,true);}
+  finally{WX.busy=false;wxRerender();}
+}
+function wxApplyAtmos(quiet){
+  const w=S.session.wx;if(!w)return;
+  S.session.T=Math.round(w.cur.T);S.session.P=Math.round(w.cur.P);saveSession();renderSolveForm();compute();
+  toast(`${S.session.T} °C og ${S.session.P} hPa sat i løsningen`+(w.src!=='gps'?' (ikke GPS — '+(w.src==='stade'?'kortets stade':'startposition')+')':''));
+}
+function wxWindCall(){
+  const w=S.session.wx;if(!w)return null;const sh=sessShot();
+  const r5=x=>Math.round(x*WX_RED*2)/2;
+  return {min:r5(w.cur.ws),max:Math.max(r5(w.cur.wg??w.cur.ws),r5(w.cur.ws)),clock:sh?vindKlok(w.cur.wd,sh.b):null,b:sh?sh.b:null};
+}
+function wxApplyWind(){
+  const k=wxWindCall();if(!k||k.clock==null)return;
+  S.session.windMode='single';S.session.zones[0]={min:k.min,max:k.max,clock:k.clock};S.session.windFrom=Math.round(S.session.wx.cur.wd);
+  saveSession();renderSolveForm();compute();go('v-solve');
+  toast(`Vind ${fmt(k.min,1)}–${fmt(k.max,1)} m/s fra kl. ${fmt(k.clock,k.clock%1?1:0)} sat som kald — ret efter flag og mirage`);
+}
+function wxRerender(){if(curPage==='vejr')renderWx();if(curPage==='v-solve'&&$('#wxSolve')){const b=$('#wxSolve');b.disabled=WX.busy;b.textContent=WX.busy?'Henter vejr …':'Hent temperatur og tryk (GPS)';b.nextElementSibling.textContent=wxLine();}}
+function renderWx(){
+  const w=S.session.wx,k=wxWindCall(),age=wxAgeMin(w);
+  let body='';
+  if(w){const c=w.cur;
+    body=`<div class="card res">
+      ${age>180?'<div class="alarm">Vejret er over 3 timer gammelt — hent igen</div>':''}
+      <div class="line"><span class="k">Temperatur</span><span class="v">${fmt(c.T,1)} <small>°C</small></span></div>
+      <div class="line"><span class="k">Stationstryk</span><span class="v">${fmt(c.P,0)} <small>hPa</small></span></div>
+      <div class="line"><span class="k">Vind 10 m</span><span class="v">${fmt(c.ws,1)} <small>stød ${fmt(c.wg,1)} m/s</small></span></div>
+      <div class="line"><span class="k">Fra</span><span class="v">${grVis(c.wd)} <small>${kompas(c.wd)}</small></span></div>
+      <div class="line"><span class="k">Ved skytten</span><span class="v">${fmt(k.min,1)}–${fmt(k.max,1)} <small>m/s${k.clock!=null?' · kl. '+fmt(k.clock,k.clock%1?1:0):''}</small></span></div>
+      <div class="meta">${w.src==='gps'?'GPS-position':w.src==='stade'?'Kortets stade (GPS ikke tilgængelig)':'Kortets startposition (GPS ikke tilgængelig)'} ${fmt(w.lat,3)}° N · ${fmt(w.lon,3)}° Ø${Number.isFinite(w.elev)?' · '+fmt(w.elev,0)+' m o.h.':''} · modeltid ${hhmm(c.time)} · hentet ${wxAgeTxt(w)}<br>
+      Sol op ${hhmm(w.sun.rise)} · ned ${hhmm(w.sun.set)}</div>
+    </div>
+    <div class="row"><button class="btn pri" id="wxAtm">Atmosfære til løsning</button>
+      <button class="btn" id="wxWind" ${k.clock==null?'disabled':''}>Vind som kald</button></div>
+    ${k.clock==null?'<div class="hint" style="margin:-6px 0 12px">Vind som klokretning kræver stade og mål på kortet.</div>':''}
+    ${w.hours.length?`<div class="card"><h2>De næste timer</h2><table class="trtab wxt"><tr><th>kl.</th><th>°C</th><th>m/s</th><th>stød</th><th>fra</th></tr>
+      ${w.hours.map(x=>`<tr><td>${hhmm(x.time)}</td><td>${fmt(x.T,0)}</td><td>${fmt(x.ws,1)}</td><td>${fmt(x.wg,1)}</td><td>${grVis(x.wd)}</td></tr>`).join('')}</table>
+      <div class="hint">Model (Open-Meteo), vind i 10 m højde.</div></div>`:''}`;
+  }
+  $('#wxBox').innerHTML=`
+    <button class="btn pri wide" id="wxGet" style="min-height:64px;margin-bottom:12px" ${WX.busy?'disabled':''}>${WX.busy?'Henter vejr …':w?'Opdatér vejret på min position':'Hent vejret på min position'}</button>
+    ${WX.err?`<div class="alarm">${esc(WX.err)}</div>`:''}
+    ${body||'<div class="card"><p>Henter temperatur, stationstryk og vind fra Open-Meteo på telefonens GPS-position. Kræver net; det seneste hentede vejr vises offline.</p></div>'}
+    <div class="card"><h2>Om modelvinden</h2><p>Open-Meteo giver vinden i 10 m højde som 10-minutters middel og stød. Ved skytten (1–2 m over åben mark) er den typisk ca. ⅔ så kraftig, og det er dén, appen foreslår som kald: middel som min, stød som maks. Modellen ser ikke remiser, hegn og læ på banen — brug den som udgangspunkt og ret efter flag, græs og mirage.</p></div>`;
+  $('#wxGet').onclick=()=>wxFetch(false);
+  if($('#wxAtm'))$('#wxAtm').onclick=()=>wxApplyAtmos();
+  if($('#wxWind'))$('#wxWind').onclick=wxApplyWind;
+}
+
 /* ---------- Mindset: lydspor ---------- */
 const MS={repo:[],own:[],cur:null,url:null,offline:{},loaded:false,edit:null};
 const MS_CACHE='ballistik308-mindset';
