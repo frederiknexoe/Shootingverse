@@ -823,7 +823,7 @@ svg.ret{width:100%;height:auto;max-height:62vh;display:block;background:var(--pa
 .ring-lbl{background:none;border:0;font:700 12px/16px var(--head);color:#e0a820;text-align:center;text-shadow:0 0 4px #000,0 0 4px #000}
 .res.flat{border:0;padding:0;box-shadow:none;margin:0 0 12px}
 .btn:disabled{opacity:.35}
-/* Holdtræning */
+/* Træning, skudlog og mindset */
 :root{--user:#dce8e0}[data-theme=night]{--user:#ff8a80}
 .trsc .trrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .trbig{font:clamp(30px,10vw,44px)/1.05 var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
@@ -871,6 +871,56 @@ details.faq summary::before{content:'+';display:inline-block;width:24px;flex:0 0
 details.faq[open] summary::before{content:'−'}
 details.faq summary::-webkit-details-marker{display:none}
 details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg)}
+/* DOPE-kort: papirark i to paneler, altid sort på hvidt (nat: rødt filter på skærmen) */
+.dk{--ink:#111;--paper:#fff;--shade:#d9d9d9;--dkw:#ececec;--dkc:#c4c4c4;--dkm:#555;color:#111;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+[data-theme=night] #cardWrap{position:relative;isolation:isolate}
+[data-theme=night] #cardWrap .dk{filter:invert(1) grayscale(1)}
+[data-theme=night] #cardWrap::after{content:'';position:absolute;inset:0;background:#ff3b2f;mix-blend-mode:multiply;pointer-events:none}
+.dk-sheet{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:12px}
+.dk-panel{background:#fff;border:1px solid #111;padding:10px;min-width:0}
+.dk-tbox{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dk table{border-collapse:collapse;width:100%;font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif;font-variant-numeric:tabular-nums;color:#111;background:#fff}
+.dk td,.dk th{border:1px solid #111;padding:2px 5px;white-space:nowrap;position:static;background:none;color:#111;letter-spacing:0;text-transform:none}
+.dk-hdr{border:2px solid #111}
+.dk-hdr td{font-size:14px;height:24px}
+.dk-hdr .k{font-weight:700;width:1%}
+.dk-hdr .v{font-family:Arial,sans-serif;font-size:13px}
+.dk-t{border:2px solid #111;border-top:0}
+.dk-t th{font-weight:700;font-size:14px;text-align:left;line-height:1.05}
+.dk-t th small{display:block;font-size:10px;font-weight:600;text-align:right}
+.dk-t td{font-size:15px;text-align:right;height:32px}
+.dk-t td.d{font-weight:700;text-align:left}
+.dk-t td.e{font-weight:700;font-size:16px}
+.dk-t td.bk{font-weight:700}
+.dk-t td.bk small{font-weight:400;font-size:9px;margin-left:2px}
+.dk .dk-w{background:var(--dkw)}
+.dk .dk-c{background:var(--dkc)}
+.dk-t .split{border-left:3px solid #111}
+.dk-key{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11px;color:#555;margin-top:6px;line-height:1.35}
+.dk-key i{font-style:normal;display:inline-block;width:10px;height:10px;border:1px solid #111;margin-right:4px;vertical-align:-1px}
+.dk-right{display:grid;gap:10px;align-content:start}
+.dk h2.dk-h{font:400 20px Arial,sans-serif;text-align:center;margin:0;color:#111;letter-spacing:0;text-transform:none;border:0;padding:0}
+.dk h3{font:600 13px Arial,sans-serif;text-align:center;margin:0 0 6px;color:#111}
+.dk-clock{width:100%;max-width:520px;display:block;margin:0 auto}
+.dk-clock text{font-family:'Arial Narrow',Arial,sans-serif;fill:#111;text-anchor:middle;dominant-baseline:central}
+.dk-clock .cl{font-size:15px;font-weight:700}.dk-clock .sv{font-size:12px}.dk-clock .sv.b{font-size:14px;font-weight:700}.dk-clock .pc{font-size:8px}.dk-clock .sd{font-size:13px;font-weight:700}
+.dk-mbox{border:1px solid #111;padding:8px}
+.dk-mrow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.dk figure{margin:0;text-align:center;min-width:0}
+.dk-mir{width:100%;max-width:90px}
+.dk figcaption{font-size:10px;line-height:1.2}
+.dk-est{border:2px solid #111}
+.dk-est caption{font:700 17px Arial,sans-serif;border:2px solid #111;border-bottom:0;padding:2px;color:#111}
+.dk-est th{font-size:14px;text-align:left}
+.dk-est td{font-size:13px;white-space:normal;font-family:Arial,sans-serif}
+.dk-est td:first-child{font-weight:700;text-align:center;white-space:nowrap;font-size:14px}
+.dk-foot{font-size:11px;color:#555;line-height:1.4;margin:0}
+#cardWrap{margin:0 0 12px}
+#cardWrap td.bk{cursor:pointer}
+#cardWrap td.bk:empty::after{content:'+';color:#bbb;font-weight:400}
+#cardWrap td.bk.sel{outline:3px solid #111;outline-offset:-3px;background:#fff6c8}
+
+@media (max-width:560px){#cardWrap .dk-panel{padding:6px}#cardWrap .dk-t td{font-size:13px;padding:2px 3px;height:30px}#cardWrap .dk-t td.e{font-size:14px}#cardWrap .dk-t th{font-size:12px;padding:2px 3px}#cardWrap .dk-full{display:none}#cardWrap .dk-hdr td{font-size:12px}}
 #printArea{display:none}
 @media print{
   body::before{display:none}
@@ -891,6 +941,30 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
   #printArea .pt td.el{font-weight:700;font-size:1.15em}
   #printArea .pt tr.tf td{border-top:1.6pt solid #000}
   #printArea .flag{font-weight:700}
+
+  #printArea .dk{font-size:9pt}
+  #printArea .dk-sheet{grid-template-columns:1fr 1fr;gap:4mm}
+  #printArea .dk-panel{padding:3mm;break-inside:avoid}
+  #printArea .dk th,#printArea .dk td{background:none;color:#000;padding:.4mm 1.2mm;border:.5pt solid #000;text-align:inherit}
+  #printArea .dk .dk-w{background:#ececec}#printArea .dk .dk-c{background:#c4c4c4}
+  #printArea .dk-hdr td{height:5.6mm;font-size:9.5pt}
+  #printArea .dk-hdr .v{font-size:9pt}
+  #printArea .dk-t th{font-size:9.5pt;text-align:left}
+  #printArea .dk-t td{height:7.6mm;font-size:10.5pt;text-align:right}
+  #printArea .dk-t td.d{text-align:left}
+  #printArea .dk-t td.e{font-size:11.5pt}
+  #printArea .dk-key{font-size:7pt}
+  #printArea .dk h2.dk-h{font-size:12pt}
+  #printArea .dk h3{font-size:8.5pt;margin-bottom:1mm}
+  #printArea .dk-clock{width:88mm;max-width:none}
+  #printArea .dk-mbox{padding:1.5mm}
+  #printArea .dk-mir{width:15mm}
+  #printArea .dk figcaption{font-size:6.5pt}
+  #printArea .dk-est caption{font-size:10pt}
+  #printArea .dk-est th{font-size:8.5pt;text-align:left}
+  #printArea .dk-est td{font-size:8pt;padding:.3mm 1.2mm}
+  #printArea .dk-est td:first-child{text-align:center;font-size:8.5pt}
+  #printArea .dk-foot{font-size:7pt}
 }
 </style>
 </head>
@@ -898,7 +972,7 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
 <div id="banner"><button class="btn pri" id="updBtn">Ny version — tryk for at opdatere</button></div>
 <header>
   <button class="iconbtn" id="menuBtn" aria-label="Menu">☰</button>
-  <h1 id="hdrTitle">Løsning<span class="prof" id="hdrProf"></span></h1>
+  <h1 id="hdrTitle">Input<span class="prof" id="hdrProf"></span></h1>
   <button class="iconbtn" id="themeBtn" aria-label="Skift til nat">☾</button>
 </header>
 <main>
@@ -912,6 +986,17 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
       <div id="dopeWrap"></div>
       <div id="dopeHead" class="meta" style="margin-top:8px"></div>
       <div class="row" style="margin-top:14px"><button class="btn" id="printA6">Udskriv skydekort A6</button><button class="btn" id="printWB">Udskriv armbåndskort</button></div>
+    </div>
+    <div class="view" id="v-card">
+      <div class="card">
+        <h2>DOPE-kort</h2>
+        <div id="cardForm"></div>
+        <div class="hint">Elevation og vind regnes af løseren med den aktive ammunition og atmosfæren under Input. <b>Tryk på et felt i Bekræftet</b> for at skrive den elevation ind, der faktisk ramte. Værdierne gemmes pr. ammunition, lot og lyddæmperstatus.</div>
+      </div>
+      <div id="cardEd"></div>
+      <div id="cardWrap"></div>
+      <div id="cardTrue"></div>
+      <div class="row"><button class="btn pri" id="printCardA4" style="min-height:64px">Udskriv DOPE-kort A4</button></div>
     </div>
     <div class="view" id="v-hold">
       <div class="card">
@@ -929,7 +1014,6 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
     <div id="mapBox"><div id="map"></div><div id="mapTools"></div><div id="mapHint"></div></div>
     <div class="card" id="mapRead"></div>
   </section>
-  <section class="tab" id="tab-train"><div id="trainBox"></div></section>
   <section class="tab" id="tab-log"><div id="logBox"></div></section>
   <section class="tab" id="tab-mindset"><div id="msBox"></div><audio id="msAudio" preload="none" playsinline></audio></section>
   <section class="tab" id="tab-faq">
@@ -955,14 +1039,13 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
       </table>
     </div>
     <div class="card"><h2>Spørgsmål og svar</h2>
-      <details class="faq"><summary>Hvad er forskellen på at dreje og holde?</summary><p>Elevation <b>drejes</b> på tårnet — det tal står i skydetabellen og under Løsning. Vind <b>holdes</b> i retiklen, fordi den skifter fra skud til skud. Hold-siden viser punktet i retiklen.</p></details>
+      <details class="faq"><summary>Hvad er forskellen på at dreje og holde?</summary><p>Elevation <b>drejes</b> på tårnet — det tal står i skydetabellen og under Input. Vind <b>holdes</b> i retiklen, fordi den skifter fra skud til skud. Hold-siden viser punktet i retiklen.</p></details>
       <details class="faq"><summary>Hvad er vindgaflen?</summary><p>Holdet ved den svageste og den stærkeste vind, du tror der er, fx 0,6–1,2 H. Hold i midten. Er gaflen bredere end målet, er skuddet ikke sikkert: læs vinden bedre, vent på et roligt øjeblik eller gå tættere på. Usikkerhed på retningen (± ½ eller 1 time) gør gaflen bredere.</p></details>
       <details class="faq"><summary>Hvad betyder fuld og halv værdi?</summary><p>Kun den del af vinden, der blæser på tværs, flytter kuglen. Kl. 3 og 9 = fuld værdi. Kl. 2, 4, 8 og 10 = ca. 87 %. Kl. 1, 5, 7 og 11 = halv værdi. Kl. 12 og 6 = ingen sidevind.</p></details>
       <details class="faq"><summary>Hvad er den faste højredrift?</summary><p>Kuglens rotation (spin drift) og jordens rotation skubber altid kuglen lidt til højre — ca. 0,25 mil på 700 m regnet fra din nulafstand. Appen lægger den automatisk i vindholdet, så du holder lidt mod venstre selv uden sidevind.</p></details>
       <details class="faq"><summary>Hvorfor advarer appen om V₀-temperatur?</summary><p>Kold ammunition er langsommere. 20 m/s lavere V₀ mellem sommer og vinter er ca. ½ mil lavt på 700 m. Skriv under Ammunition, ved hvilken temperatur V₀ blev målt — så advarer appen, når vejret er mere end 10 °C fra.</p></details>
       <details class="faq"><summary>Hvordan regner jeg cm om til klik?</summary><p>Antal klik = cm ÷ afstanden i hundrede meter. 15 cm lavt på 300 m = 15 ÷ 3 = 5 klik op.</p></details>
       <details class="faq"><summary>Hvordan bruger jeg skudloggen?</summary><p>Efter hvert skud: tryk først hvor sigtet var, da skuddet gik (kald), derefter hvor kuglen ramte (træf). Spredningen i dine kald er din affyring. Forskellen mellem træf og kald er vind og data. Med mindst 3 skud på 400–750 m foreslår appen en rettet V₀ ud fra dine faktiske træf.</p></details>
-      <details class="faq"><summary>Hvad træner holdtræningen?</summary><p>At omsætte et vindkald og en afstand til det rigtige punkt i retiklen hurtigt og uden regnefejl. Ved fejl forklarer den, hvad der gik galt — fx forkert side, fuld/halv værdi forvekslet eller elevation fra en forkert afstand.</p></details>
       <details class="faq"><summary>Hvad er klikkorrektionsfaktoren?</summary><p>Hvis tårnet flytter lidt mere eller mindre end 0,1 mil pr. klik. Find den med en tall target-test: opskruet ÷ målt. Står den på 1,000, regner appen med tårnets påstand.</p></details>
     </div>
   </section>
@@ -974,15 +1057,15 @@ details.faq p{margin:0 0 10px 24px;font-size:14px;line-height:1.6;color:var(--fg
 <div id="menu" role="dialog" aria-label="Menu">
   <div class="menu-top"><h2>Menu</h2><button class="iconbtn" id="menuClose" aria-label="Luk menu">✕</button></div>
   <div class="mgrp">Skyd</div>
-  <button class="mitem" data-go="v-solve">Løsning</button>
+  <button class="mitem" data-go="v-solve">Input</button>
   <button class="mitem" data-go="v-dope">Skydetabel</button>
+  <button class="mitem" data-go="v-card">DOPE-kort</button>
   <button class="mitem" data-go="v-hold">Hold</button>
   <button class="mitem" data-go="v-prof">Ammunition</button>
   <div class="mgrp">Felt</div>
   <button class="mitem" data-go="kort">Kort</button>
   <button class="mitem" data-go="vejr">Vejr &amp; Lys</button>
   <div class="mgrp">Træning</div>
-  <button class="mitem" data-go="train">Holdtræning</button>
   <button class="mitem" data-go="log">Skudlog</button>
   <button class="mitem" data-go="mindset">Mindset</button>
   <div class="mgrp">System</div>
@@ -1141,7 +1224,7 @@ function parseNum(str){
 }
 /*ENGINE-END*/
 
-const APP_VERSION='3.6.0';
+const APP_VERSION='3.9.0';
 const DB_NAME='ballistik308',DB_VERSION=1,SCHEMA=1;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function fmt(v,d=1){if(v==null||!Number.isFinite(v))return '–';let s=v.toFixed(d);if(/^-0(\.0*)?$/.test(s))s=s.slice(1);return s.replace('.',',');}
@@ -1213,11 +1296,13 @@ const TEMPLATES=[
 ];
 function blankProfile(){return normProfile({id:uid(),name:'',weight:null,bc:null,mv:null,verified:false});}
 const BOXFIELDS=[
- ['boxMv','Hastighed på æsken','m/s',{min:400,max:1200,step:1,dec:0,opt:true}],
+ ['boxMv','Hastighed på æsken','m/s eller fps',{min:400,max:4000,step:1,dec:0,opt:true,hint:'Over 1300 regnes som fps og omregnes til m/s.'}],
  ['boxBarrel','Æskens testløb','tommer',{min:10,max:34,step:1,dec:0,opt:true}]
 ];
 const BARREL_IN=20,MV_PER_IN=7.5;
-function boxEstimate(p){return p.boxMv!=null&&p.boxBarrel!=null?p.boxMv-(p.boxBarrel-BARREL_IN)*MV_PER_IN:null;}
+const FPS=0.3048;
+function boxMs(v){return v==null?null:v>1300?v*FPS:v;}
+function boxEstimate(p){return p.boxMv!=null&&p.boxBarrel!=null?boxMs(p.boxMv)-(p.boxBarrel-BARREL_IN)*MV_PER_IN:null;}
 function lotTxt(p){return p.lot?' · lot '+esc(p.lot):'';}
 const PFIELDS=[
  ['weight','Projektilvægt','grain',{min:100,max:250,step:1,dec:1}],
@@ -1296,6 +1381,7 @@ document.addEventListener('input',e=>{
   else if(f==='set')onSettingsInput();
   else if(f==='map')onMapInput();
   else if(f==='log')lgKeep();
+  else if(f==='card')onCardInput();
 });
 
 function applyTheme(){
@@ -1306,21 +1392,23 @@ function applyTheme(){
 }
 
 /* ---------- Navigation (menuknap) ---------- */
-const PAGES={'v-solve':['skyd','Løsning'],'v-dope':['skyd','Skydetabel'],'v-hold':['skyd','Hold'],'v-prof':['skyd','Ammunition'],kort:['kort','Kort'],vejr:['vejr','Vejr & Lys'],log:['log','Skudlog'],mindset:['mindset','Mindset'],'v-set':['gear','Indstillinger'],backup:['backup','Backup'],faq:['faq','FAQ'],train:['train','Holdtræning']};
+const PAGES={'v-solve':['skyd','Input'],'v-dope':['skyd','Skydetabel'],'v-card':['skyd','DOPE-kort'],'v-hold':['skyd','Hold'],'v-prof':['skyd','Ammunition'],kort:['kort','Kort'],vejr:['vejr','Vejr & Lys'],log:['log','Skudlog'],mindset:['mindset','Mindset'],'v-set':['gear','Indstillinger'],backup:['backup','Backup'],faq:['faq','FAQ']};
 let curPage='v-solve';
 function go(id){
-  const pg=PAGES[id];if(!pg)return;curPage=id;
+  const pg=PAGES[id];if(!pg)return;
+  if(compT){clearTimeout(compT);compT=null;compute();} // ventende beregning gøres færdig før sideskift
+  curPage=id;
   $$('.tab').forEach(x=>x.classList.toggle('on',x.id==='tab-'+pg[0]));
   if(id.startsWith('v-'))$$('#tab-'+pg[0]+' .view').forEach(x=>x.classList.toggle('on',x.id===id));
   $$('#menu .mitem').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
   $('#hdrTitle').firstChild.nodeValue=pg[1];
   closeMenu();
-  if(id==='v-dope')renderDope();if(id==='v-hold')renderHold();if(id==='v-prof')renderProfiles();
-  if(id!=='train')trStop();if(id==='train')showTrain();if(id==='log')showLog();if(id==='backup')renderBackup();
+  if(id==='v-dope')renderDope();if(id==='v-card')renderCard();if(id==='v-hold')renderHold();if(id==='v-prof')renderProfiles();
+  if(id==='log')showLog();if(id==='backup')renderBackup();
   if(id==='v-set')renderSettings();if(id==='kort')showMap();if(id==='mindset')showMindset();if(id==='vejr')renderWx();
   window.scrollTo(0,0);
 }
-const TAB_DEFAULT={skyd:'v-solve',gear:'v-set',backup:'backup',faq:'faq',train:'train',kort:'kort',vejr:'vejr',log:'log',mindset:'mindset'};
+const TAB_DEFAULT={skyd:'v-solve',gear:'v-set',backup:'backup',faq:'faq',kort:'kort',vejr:'vejr',log:'log',mindset:'mindset'};
 function showTab(tab){if(PAGES[curPage][0]!==tab)go(TAB_DEFAULT[tab]);}
 function showView(bar,v){go(v);}
 function openMenu(){updateBackupBadge();$$('#menu .mitem').forEach(b=>b.classList.toggle('on',b.dataset.go===curPage));$('#menu').classList.add('on');document.body.classList.add('mopen');}
@@ -1366,7 +1454,7 @@ function renderSolveForm(){
 }
 let compT;
 function onSessionInput(){
-  clearTimeout(compT);compT=setTimeout(compute,180);
+  clearTimeout(compT);compT=setTimeout(()=>{compT=null;compute();},180);
 }
 function collectSession(){
   const {ok,vals}=readForm('sess');
@@ -1407,6 +1495,7 @@ function compute(){
 function refreshViews(){
   updateQuick();
   if($('#v-dope').classList.contains('on'))renderDope();
+  if($('#v-card').classList.contains('on'))renderCard();
   if($('#v-hold').classList.contains('on'))renderHold();
 }
 function machCls(m){return m<1?'err':m<1.2?'warn':'';}
@@ -1415,6 +1504,14 @@ function mvWarn(p,T,short){
   return short?`<div class="alarm">V₀ målt ved ${fmt(p.mvT,0)} °C — nu ${fmt(T,0)} °C</div>`:`<div class="alarm">V₀ er målt ved ${fmt(p.mvT,0)} °C, nu er det ${fmt(T,0)} °C. ${d<0?'Kold':'Varm'} ammunition kan ændre V₀ 10–25 m/s, og det flytter elevationen op til ca. ½ mil på 700 m. Mål V₀ igen eller ret den under Ammunition.</div>`;
 }
 function dirTxt(zones){const u=S.session.dirU||0;if(zones.length>1||!u)return '';const c=zones[0].clock;const w=x=>{x=((x%12)+12)%12;if(x<1)x+=12;return fmt(x,x%1?1:0);};return ` · retning kl. ${w(c-u)}–${w(c+u)}`;}
+// Hvad flytter 10 m afstand og 5 m/s V₀ på den aktuelle afstand (elevation, tårnværdi).
+function sensTxt(ctx,sol,R){
+  try{const Z=[{min:0,max:0,clock:3}];
+    const a=solvePoint(ctx,R+10,Z),c2=buildCtx(Object.assign({},ctx.pr,{mv:ctx.pr.mv-5}),ctx.cond),b=solvePoint(c2,R,Z);
+    if(!a||!b)return '';
+    return `<div class="meta">Følsomhed på ${fmtR(R)} m: ±10 m afstand = ±${fmt(Math.abs(a.elevDial-sol.elevDial),2)} · ±5 m/s V₀ = ±${fmt(Math.abs(b.elevDial-sol.elevDial),2)} ${(ctx.pr.clickFactor||1)===1?'mil':'tårn'} elevation</div>`;
+  }catch(e){return '';}
+}
 function renderResult(){
   const {ctx,sol,zones}=S.last,p=ctx.pr,R=S.session.dist,cf=p.clickFactor||1;
   const zs=zones.length>1?`<div class="meta">Zonefølsomhed (fuld værdi): ${zoneNames(3).map((n,i)=>n.split(' ')[0]+' '+fmt(Math.abs(sol.zoneSens[i]),2)).join(' · ')} mil pr. m/s</div>`:'';
@@ -1424,7 +1521,7 @@ function renderResult(){
   <div class="line"><span class="k">Elevation <small style="letter-spacing:1px">drej</small></span><span class="v">${ud(sol.elevDial)} <small>${cf===1?'mil':'tårn'} · ${Math.abs(clicks(sol.elevDial))} klik</small></span></div>
   <div class="line"><span class="k">Vind <small style="letter-spacing:1px">hold</small></span><span class="v">${forkTxt(sol.fMin,sol.fMax)} <small>mil</small></span></div>
   <div class="meta">1 m/s fuld værdi = ${fmt(Math.abs(sol.wind1),2)} mil${dirTxt(zones)} · fast højredrift ${fmt(Math.abs(sol.drift),2)} mil indregnet (spin drift og jordrotation)${ctx.cond.supp&&(p.suppShiftUp||p.suppShiftRight)?' · lyddæmperforskydning indregnet':''}${cf!==1?` · klikfaktor ${fmt(cf,3)} indregnet i elevationen; vindhold er altid retikel-mil`:''}</div>
-  ${zs}
+  ${zs}${sensTxt(ctx,sol,R)}
   <div class="meta"><span class="${machCls(sol.mach)}" style="padding:0 4px">Mach ${fmt(sol.mach,2)}</span> · ${fmt(sol.v,0)} m/s · ${fmt(sol.t,2)} s flyvetid</div>
   <div class="meta">V₀ ${fmt(ctx.mv,1)} m/s · DH ${fmt(ctx.atm.da,0)} m</div>`;
 }
@@ -1433,20 +1530,27 @@ function renderResult(){
 async function wakeOn(){try{if('wakeLock' in navigator){S.wake=await navigator.wakeLock.request('screen');S.wake.addEventListener('release',()=>{S.wake=null;});}}catch(e){S.wake=null;}updateQuick();}
 function wakeOff(){try{if(S.wake)S.wake.release();}catch(e){}S.wake=null;}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){applyTheme();if(S.quickOn&&!S.wake)wakeOn();}});
+// Koldt første skud mod varme skud (træf − kald), kun som påmindelse. Kræver mindst 3 kolde og 3 varme skud.
+function coldOffset(p){
+  const L=lgShotsForProfile(p),cold=L.filter(r=>r.cold),warm=L.filter(r=>!r.cold);
+  if(cold.length<3||warm.length<3)return null;
+  return {x:mean(cold.map(r=>r.hit.x-r.call.x))-mean(warm.map(r=>r.hit.x-r.call.x)),y:mean(cold.map(r=>r.hit.y-r.call.y))-mean(warm.map(r=>r.hit.y-r.call.y)),n:cold.length};
+}
 function ctx_cf(){return S.last?S.last.ctx.pr.clickFactor:1;}
 function updateQuick(){
   if(!S.quickOn)return;
   const q=$('#qTop');
-  if(!S.last){q.innerHTML='<div class="alarm">Ingen gyldig løsning. Ret input under Løsning.</div>';return;}
+  if(!S.last){q.innerHTML='<div class="alarm">Ingen gyldig løsning. Ret input under Input.</div>';return;}
   const {sol,ctx}=S.last,R=S.session.dist;
   q.innerHTML=`${mvWarn(ctx.pr,ctx.cond.T,true)}
   <div class="qk">Afstand</div><div class="qv">${fmtR(R)} m</div>
   <div class="qk">Elevation</div><div class="qv">${ud(sol.elevDial)}</div><div class="qs">${Math.abs(clicks(sol.elevDial))} klik</div>
   <div class="qk">Vind — hold i retiklen</div><div class="qv" style="font-size:min(11vw,56px);white-space:nowrap">${forkTxt(sol.fMin,sol.fMax)}</div>
   <div class="qs">1 m/s = ${fmt(Math.abs(sol.wind1),2)} mil · Mach ${fmt(sol.mach,2)}</div>
+  ${(()=>{const c=coldOffset(ctx.pr);if(!c)return '';const big=Math.abs(c.x)>=0.05||Math.abs(c.y)>=0.05;return `<div class="qs" style="color:var(--warn)">Koldt skud: ${big?lgPos(c)+' mil i forhold til varme':'ingen afvigelse'} (${c.n} kolde)</div>`;})()}
   ${S.wake?'':'<div class="hint" style="font-size:11px">Skærmen holdes ikke tændt</div>'}`;
 }
-$('#quickBtn').onclick=()=>{S.quickOn=true;$('#quick').classList.add('on');updateQuick();wakeOn();};
+$('#quickBtn').onclick=()=>{S.quickOn=true;$('#quick').classList.add('on');updateQuick();wakeOn();lgLoad().then(updateQuick);};
 $('#qClose').onclick=()=>{S.quickOn=false;$('#quick').classList.remove('on');wakeOff();};
 $('#quick').addEventListener('click',e=>{
   const b=e.target.closest('[data-q]');if(!b)return;
@@ -1462,7 +1566,7 @@ function dopeRows(list){return dopeTable(S.last.ctx,list,S.last.zones);}
 function forkSide(rows){rows=rows.filter(r=>!r.out);const all=rows.flatMap(r=>[r.fMin,r.fMax]).filter(v=>Math.abs(v)>=0.05);if(!all.length)return '';if(all.every(v=>v>0))return 'H';if(all.every(v=>v<0))return 'V';return null;}
 function forkCell(r,side){if(side!==null){const a=[Math.abs(r.fMin),Math.abs(r.fMax)].sort((x,y)=>x-y);return `${fmt(a[0],1)}–${fmt(a[1],1)}`;}return `${lr(r.fMin)}–${lr(r.fMax)}`;}
 function renderDope(){
-  if(!S.last){$('#dopeWrap').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Løsning.</div>';$('#dopeHead').textContent='';return;}
+  if(!S.last){$('#dopeWrap').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Input.</div>';$('#dopeHead').textContent='';return;}
   const {ctx}=S.last,p=ctx.pr,rows=dopeRows(DOPE_SCREEN),z=S.last.zones,side=forkSide(rows);
   const fork=z.length===1?`vind ${fmt(z[0].min,1)}–${fmt(z[0].max,1)} m/s kl. ${fmt(z[0].clock,1)}`:'vind 3 zoner';
   let first=true;
@@ -1494,6 +1598,110 @@ function printCard(kind){
 $('#printA6').onclick=()=>printCard('a6');
 $('#printWB').onclick=()=>printCard('wb');
 
+/* ---------- DOPE-kort (A4 liggende, to paneler) ---------- */
+const CARD_R=[100,150,200,250,300];for(let x=325;x<=900;x+=25)CARD_R.push(x);
+const CARD_CLOCK="<svg viewBox=\"0 0 620 620\" class=\"dk-clock\" role=\"img\" aria-label=\"Vindur med korrigeret vindstyrke for vinkel\"><circle cx=\"310\" cy=\"310\" r=\"266\" fill=\"#fff\" stroke=\"#111\" stroke-width=\"1.2\"/><circle cx=\"310\" cy=\"310\" r=\"232\" fill=\"#d9d9d9\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"204\" fill=\"#fff\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"176\" fill=\"#d9d9d9\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"148\" fill=\"#fff\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"120\" fill=\"#d9d9d9\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"92\" fill=\"#fff\" stroke=\"#111\" stroke-width=\"1\"/><circle cx=\"310\" cy=\"310\" r=\"62\" fill=\"#fff\" stroke=\"#111\" stroke-width=\"1\"/><line x1=\"340.3\" y1=\"80.0\" x2=\"344.7\" y2=\"46.3\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"310.0\" y=\"61.0\" class=\"cl\" transform=\"rotate(0 310.0 61.0)\">12:00</text><text x=\"310.0\" y=\"233.0\" class=\"pc\">0%</text><text x=\"310.0\" y=\"204.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"176.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"148.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"120.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"92.0\" class=\"sv b\">0</text><line x1=\"398.8\" y1=\"95.7\" x2=\"411.8\" y2=\"64.2\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"374.4\" y=\"69.5\" class=\"cl\" transform=\"rotate(15 374.4 69.5)\">12:30</text><text x=\"329.9\" y=\"235.6\" class=\"pc\">25%</text><text x=\"337.4\" y=\"207.6\" class=\"sv\">0,5</text><text x=\"344.7\" y=\"180.6\" class=\"sv\">1</text><text x=\"351.9\" y=\"153.5\" class=\"sv\">1,5</text><text x=\"359.2\" y=\"126.5\" class=\"sv\">2</text><text x=\"366.4\" y=\"99.4\" class=\"sv\">2,5</text><line x1=\"451.2\" y1=\"125.9\" x2=\"471.9\" y2=\"99.0\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"434.5\" y=\"94.4\" class=\"cl\" transform=\"rotate(30 434.5 94.4)\">1:00</text><text x=\"348.5\" y=\"243.3\" class=\"pc\">50%</text><text x=\"363.0\" y=\"218.2\" class=\"sv\">1</text><text x=\"377.0\" y=\"194.0\" class=\"sv\">2</text><text x=\"391.0\" y=\"169.7\" class=\"sv\">3</text><text x=\"405.0\" y=\"145.5\" class=\"sv\">4</text><text x=\"419.0\" y=\"121.2\" class=\"sv\">5</text><line x1=\"494.1\" y1=\"168.8\" x2=\"521.0\" y2=\"148.1\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"486.1\" y=\"133.9\" class=\"cl\" transform=\"rotate(45 486.1 133.9)\">1:30</text><text x=\"364.4\" y=\"255.6\" class=\"pc\">70%</text><text x=\"385.0\" y=\"235.0\" class=\"sv\">1,4</text><text x=\"404.8\" y=\"215.2\" class=\"sv\">2,8</text><text x=\"424.6\" y=\"195.4\" class=\"sv\">4</text><text x=\"444.4\" y=\"175.6\" class=\"sv\">5,5</text><text x=\"464.1\" y=\"155.9\" class=\"sv\">7</text><line x1=\"524.3\" y1=\"221.2\" x2=\"555.8\" y2=\"208.2\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"525.6\" y=\"185.5\" class=\"cl\" transform=\"rotate(60 525.6 185.5)\">2:00</text><text x=\"376.7\" y=\"271.5\" class=\"pc\">85%</text><text x=\"401.8\" y=\"257.0\" class=\"sv\">1,7</text><text x=\"426.0\" y=\"243.0\" class=\"sv\">3,5</text><text x=\"450.3\" y=\"229.0\" class=\"sv\">5</text><text x=\"474.5\" y=\"215.0\" class=\"sv\">7</text><text x=\"498.8\" y=\"201.0\" class=\"sv\">8,5</text><line x1=\"540.0\" y1=\"279.7\" x2=\"573.7\" y2=\"275.3\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"550.5\" y=\"245.6\" class=\"cl\" transform=\"rotate(75 550.5 245.6)\">2:30</text><text x=\"384.4\" y=\"290.1\" class=\"pc\">95%</text><text x=\"412.4\" y=\"282.6\" class=\"sv\">1,9</text><text x=\"439.4\" y=\"275.3\" class=\"sv\">3,9</text><text x=\"466.5\" y=\"268.1\" class=\"sv\">6</text><text x=\"493.5\" y=\"260.8\" class=\"sv\">7,5</text><text x=\"520.6\" y=\"253.6\" class=\"sv\">9,5</text><line x1=\"540.0\" y1=\"340.3\" x2=\"573.7\" y2=\"344.7\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"559.0\" y=\"310.0\" class=\"cl\" transform=\"rotate(90 559.0 310.0)\">3:00</text><text x=\"387.0\" y=\"310.0\" class=\"pc\">100%</text><text x=\"416.0\" y=\"310.0\" class=\"sv b\">2</text><text x=\"444.0\" y=\"310.0\" class=\"sv b\">4</text><text x=\"472.0\" y=\"310.0\" class=\"sv b\">6</text><text x=\"500.0\" y=\"310.0\" class=\"sv b\">8</text><text x=\"528.0\" y=\"310.0\" class=\"sv b\">10</text><line x1=\"524.3\" y1=\"398.8\" x2=\"555.8\" y2=\"411.8\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"550.5\" y=\"374.4\" class=\"cl\" transform=\"rotate(-75 550.5 374.4)\">3:30</text><text x=\"384.4\" y=\"329.9\" class=\"pc\">95%</text><text x=\"412.4\" y=\"337.4\" class=\"sv\">1,9</text><text x=\"439.4\" y=\"344.7\" class=\"sv\">3,9</text><text x=\"466.5\" y=\"351.9\" class=\"sv\">6</text><text x=\"493.5\" y=\"359.2\" class=\"sv\">7,5</text><text x=\"520.6\" y=\"366.4\" class=\"sv\">9,5</text><line x1=\"494.1\" y1=\"451.2\" x2=\"521.0\" y2=\"471.9\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"525.6\" y=\"434.5\" class=\"cl\" transform=\"rotate(-60 525.6 434.5)\">4:00</text><text x=\"376.7\" y=\"348.5\" class=\"pc\">85%</text><text x=\"401.8\" y=\"363.0\" class=\"sv\">1,7</text><text x=\"426.0\" y=\"377.0\" class=\"sv\">3,5</text><text x=\"450.3\" y=\"391.0\" class=\"sv\">5</text><text x=\"474.5\" y=\"405.0\" class=\"sv\">7</text><text x=\"498.8\" y=\"419.0\" class=\"sv\">8,5</text><line x1=\"451.2\" y1=\"494.1\" x2=\"471.9\" y2=\"521.0\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"486.1\" y=\"486.1\" class=\"cl\" transform=\"rotate(-45 486.1 486.1)\">4:30</text><text x=\"364.4\" y=\"364.4\" class=\"pc\">70%</text><text x=\"385.0\" y=\"385.0\" class=\"sv\">1,4</text><text x=\"404.8\" y=\"404.8\" class=\"sv\">2,8</text><text x=\"424.6\" y=\"424.6\" class=\"sv\">4</text><text x=\"444.4\" y=\"444.4\" class=\"sv\">5,5</text><text x=\"464.1\" y=\"464.1\" class=\"sv\">7</text><line x1=\"398.8\" y1=\"524.3\" x2=\"411.8\" y2=\"555.8\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"434.5\" y=\"525.6\" class=\"cl\" transform=\"rotate(-30 434.5 525.6)\">5:00</text><text x=\"348.5\" y=\"376.7\" class=\"pc\">50%</text><text x=\"363.0\" y=\"401.8\" class=\"sv\">1</text><text x=\"377.0\" y=\"426.0\" class=\"sv\">2</text><text x=\"391.0\" y=\"450.3\" class=\"sv\">3</text><text x=\"405.0\" y=\"474.5\" class=\"sv\">4</text><text x=\"419.0\" y=\"498.8\" class=\"sv\">5</text><line x1=\"340.3\" y1=\"540.0\" x2=\"344.7\" y2=\"573.7\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"374.4\" y=\"550.5\" class=\"cl\" transform=\"rotate(-15 374.4 550.5)\">5:30</text><text x=\"329.9\" y=\"384.4\" class=\"pc\">25%</text><text x=\"337.4\" y=\"412.4\" class=\"sv\">0,5</text><text x=\"344.7\" y=\"439.4\" class=\"sv\">1</text><text x=\"351.9\" y=\"466.5\" class=\"sv\">1,5</text><text x=\"359.2\" y=\"493.5\" class=\"sv\">2</text><text x=\"366.4\" y=\"520.6\" class=\"sv\">2,5</text><line x1=\"279.7\" y1=\"540.0\" x2=\"275.3\" y2=\"573.7\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"310.0\" y=\"559.0\" class=\"cl\" transform=\"rotate(0 310.0 559.0)\">6:00</text><text x=\"310.0\" y=\"387.0\" class=\"pc\">0%</text><text x=\"310.0\" y=\"416.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"444.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"472.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"500.0\" class=\"sv b\">0</text><text x=\"310.0\" y=\"528.0\" class=\"sv b\">0</text><line x1=\"221.2\" y1=\"524.3\" x2=\"208.2\" y2=\"555.8\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"245.6\" y=\"550.5\" class=\"cl\" transform=\"rotate(15 245.6 550.5)\">6:30</text><text x=\"290.1\" y=\"384.4\" class=\"pc\">25%</text><text x=\"282.6\" y=\"412.4\" class=\"sv\">0,5</text><text x=\"275.3\" y=\"439.4\" class=\"sv\">1</text><text x=\"268.1\" y=\"466.5\" class=\"sv\">1,5</text><text x=\"260.8\" y=\"493.5\" class=\"sv\">2</text><text x=\"253.6\" y=\"520.6\" class=\"sv\">2,5</text><line x1=\"168.8\" y1=\"494.1\" x2=\"148.1\" y2=\"521.0\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"185.5\" y=\"525.6\" class=\"cl\" transform=\"rotate(30 185.5 525.6)\">7:00</text><text x=\"271.5\" y=\"376.7\" class=\"pc\">50%</text><text x=\"257.0\" y=\"401.8\" class=\"sv\">1</text><text x=\"243.0\" y=\"426.0\" class=\"sv\">2</text><text x=\"229.0\" y=\"450.3\" class=\"sv\">3</text><text x=\"215.0\" y=\"474.5\" class=\"sv\">4</text><text x=\"201.0\" y=\"498.8\" class=\"sv\">5</text><line x1=\"125.9\" y1=\"451.2\" x2=\"99.0\" y2=\"471.9\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"133.9\" y=\"486.1\" class=\"cl\" transform=\"rotate(45 133.9 486.1)\">7:30</text><text x=\"255.6\" y=\"364.4\" class=\"pc\">70%</text><text x=\"235.0\" y=\"385.0\" class=\"sv\">1,4</text><text x=\"215.2\" y=\"404.8\" class=\"sv\">2,8</text><text x=\"195.4\" y=\"424.6\" class=\"sv\">4</text><text x=\"175.6\" y=\"444.4\" class=\"sv\">5,5</text><text x=\"155.9\" y=\"464.1\" class=\"sv\">7</text><line x1=\"95.7\" y1=\"398.8\" x2=\"64.2\" y2=\"411.8\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"94.4\" y=\"434.5\" class=\"cl\" transform=\"rotate(60 94.4 434.5)\">8:00</text><text x=\"243.3\" y=\"348.5\" class=\"pc\">85%</text><text x=\"218.2\" y=\"363.0\" class=\"sv\">1,7</text><text x=\"194.0\" y=\"377.0\" class=\"sv\">3,5</text><text x=\"169.7\" y=\"391.0\" class=\"sv\">5</text><text x=\"145.5\" y=\"405.0\" class=\"sv\">7</text><text x=\"121.2\" y=\"419.0\" class=\"sv\">8,5</text><line x1=\"80.0\" y1=\"340.3\" x2=\"46.3\" y2=\"344.7\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"69.5\" y=\"374.4\" class=\"cl\" transform=\"rotate(75 69.5 374.4)\">8:30</text><text x=\"235.6\" y=\"329.9\" class=\"pc\">95%</text><text x=\"207.6\" y=\"337.4\" class=\"sv\">1,9</text><text x=\"180.6\" y=\"344.7\" class=\"sv\">3,9</text><text x=\"153.5\" y=\"351.9\" class=\"sv\">6</text><text x=\"126.5\" y=\"359.2\" class=\"sv\">7,5</text><text x=\"99.4\" y=\"366.4\" class=\"sv\">9,5</text><line x1=\"80.0\" y1=\"279.7\" x2=\"46.3\" y2=\"275.3\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"61.0\" y=\"310.0\" class=\"cl\" transform=\"rotate(270 61.0 310.0)\">9:00</text><text x=\"233.0\" y=\"310.0\" class=\"pc\">100%</text><text x=\"204.0\" y=\"310.0\" class=\"sv b\">2</text><text x=\"176.0\" y=\"310.0\" class=\"sv b\">4</text><text x=\"148.0\" y=\"310.0\" class=\"sv b\">6</text><text x=\"120.0\" y=\"310.0\" class=\"sv b\">8</text><text x=\"92.0\" y=\"310.0\" class=\"sv b\">10</text><line x1=\"95.7\" y1=\"221.2\" x2=\"64.2\" y2=\"208.2\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"69.5\" y=\"245.6\" class=\"cl\" transform=\"rotate(285 69.5 245.6)\">9:30</text><text x=\"235.6\" y=\"290.1\" class=\"pc\">95%</text><text x=\"207.6\" y=\"282.6\" class=\"sv\">1,9</text><text x=\"180.6\" y=\"275.3\" class=\"sv\">3,9</text><text x=\"153.5\" y=\"268.1\" class=\"sv\">6</text><text x=\"126.5\" y=\"260.8\" class=\"sv\">7,5</text><text x=\"99.4\" y=\"253.6\" class=\"sv\">9,5</text><line x1=\"125.9\" y1=\"168.8\" x2=\"99.0\" y2=\"148.1\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"94.4\" y=\"185.5\" class=\"cl\" transform=\"rotate(300 94.4 185.5)\">10:00</text><text x=\"243.3\" y=\"271.5\" class=\"pc\">85%</text><text x=\"218.2\" y=\"257.0\" class=\"sv\">1,7</text><text x=\"194.0\" y=\"243.0\" class=\"sv\">3,5</text><text x=\"169.7\" y=\"229.0\" class=\"sv\">5</text><text x=\"145.5\" y=\"215.0\" class=\"sv\">7</text><text x=\"121.2\" y=\"201.0\" class=\"sv\">8,5</text><line x1=\"168.8\" y1=\"125.9\" x2=\"148.1\" y2=\"99.0\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"133.9\" y=\"133.9\" class=\"cl\" transform=\"rotate(315 133.9 133.9)\">10:30</text><text x=\"255.6\" y=\"255.6\" class=\"pc\">70%</text><text x=\"235.0\" y=\"235.0\" class=\"sv\">1,4</text><text x=\"215.2\" y=\"215.2\" class=\"sv\">2,8</text><text x=\"195.4\" y=\"195.4\" class=\"sv\">4</text><text x=\"175.6\" y=\"175.6\" class=\"sv\">5,5</text><text x=\"155.9\" y=\"155.9\" class=\"sv\">7</text><line x1=\"221.2\" y1=\"95.7\" x2=\"208.2\" y2=\"64.2\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"185.5\" y=\"94.4\" class=\"cl\" transform=\"rotate(330 185.5 94.4)\">11:00</text><text x=\"271.5\" y=\"243.3\" class=\"pc\">50%</text><text x=\"257.0\" y=\"218.2\" class=\"sv\">1</text><text x=\"243.0\" y=\"194.0\" class=\"sv\">2</text><text x=\"229.0\" y=\"169.7\" class=\"sv\">3</text><text x=\"215.0\" y=\"145.5\" class=\"sv\">4</text><text x=\"201.0\" y=\"121.2\" class=\"sv\">5</text><line x1=\"279.7\" y1=\"80.0\" x2=\"275.3\" y2=\"46.3\" stroke=\"#111\" stroke-width=\".6\"/><text x=\"245.6\" y=\"69.5\" class=\"cl\" transform=\"rotate(345 245.6 69.5)\">11:30</text><text x=\"290.1\" y=\"235.6\" class=\"pc\">25%</text><text x=\"282.6\" y=\"207.6\" class=\"sv\">0,5</text><text x=\"275.3\" y=\"180.6\" class=\"sv\">1</text><text x=\"268.1\" y=\"153.5\" class=\"sv\">1,5</text><text x=\"260.8\" y=\"126.5\" class=\"sv\">2</text><text x=\"253.6\" y=\"99.4\" class=\"sv\">2,5</text><path d=\"M310 260 L301 288 L307 288 L307 358 L313 358 L313 288 L319 288 Z\" fill=\"#111\"/><text x=\"330\" y=\"318\" class=\"sd\" transform=\"rotate(-90 330 318)\">Skudretning</text></svg>";
+const CARD_MIR="<div class=\"dk-mrow\"><figure><svg viewBox=\"0 0 100 100\" class=\"dk-mir\" aria-hidden=\"true\"><defs><clipPath id=\"@@c0\"><circle cx=\"50\" cy=\"50\" r=\"44\"/></clipPath></defs><g clip-path=\"url(#@@c0)\"><rect x=\"0\" y=\"72\" width=\"100\" height=\"28\" fill=\"#d9d9d9\"/><path d=\"M26.0 72.0 L28.6 69.0 L30.4 66.0 L31.0 63.0 L30.1 60.0 L28.0 57.0 L25.3 54.0 L22.9 51.0 L21.3 48.0 L21.1 45.0 L22.3 42.0 L24.6 39.0 L27.3 36.0 L29.6 33.0 L30.9 30.0 L30.7 27.0 L29.2 24.0 L26.8 21.0 L24.1 18.0 L22.0 15.0 L21.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(0 26 72)\"/><path d=\"M40.0 72.0 L42.6 69.0 L44.4 66.0 L45.0 63.0 L44.1 60.0 L42.0 57.0 L39.3 54.0 L36.9 51.0 L35.3 48.0 L35.1 45.0 L36.3 42.0 L38.6 39.0 L41.3 36.0 L43.6 33.0 L44.9 30.0 L44.7 27.0 L43.2 24.0 L40.8 21.0 L38.1 18.0 L36.0 15.0 L35.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(0 40 72)\"/><path d=\"M54.0 72.0 L56.6 69.0 L58.4 66.0 L59.0 63.0 L58.1 60.0 L56.0 57.0 L53.3 54.0 L50.9 51.0 L49.3 48.0 L49.1 45.0 L50.3 42.0 L52.6 39.0 L55.3 36.0 L57.6 33.0 L58.9 30.0 L58.7 27.0 L57.2 24.0 L54.8 21.0 L52.1 18.0 L50.0 15.0 L49.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(0 54 72)\"/><path d=\"M68.0 72.0 L70.6 69.0 L72.4 66.0 L73.0 63.0 L72.1 60.0 L70.0 57.0 L67.3 54.0 L64.9 51.0 L63.3 48.0 L63.1 45.0 L64.3 42.0 L66.6 39.0 L69.3 36.0 L71.6 33.0 L72.9 30.0 L72.7 27.0 L71.2 24.0 L68.8 21.0 L66.1 18.0 L64.0 15.0 L63.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(0 68 72)\"/></g><circle cx=\"50\" cy=\"50\" r=\"44\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\"/></svg><figcaption><b>Ingen vind</b></figcaption></figure><figure><svg viewBox=\"0 0 100 100\" class=\"dk-mir\" aria-hidden=\"true\"><defs><clipPath id=\"@@c18\"><circle cx=\"50\" cy=\"50\" r=\"44\"/></clipPath></defs><g clip-path=\"url(#@@c18)\"><rect x=\"0\" y=\"72\" width=\"100\" height=\"28\" fill=\"#d9d9d9\"/><path d=\"M26.0 72.0 L28.6 69.0 L30.4 66.0 L31.0 63.0 L30.1 60.0 L28.0 57.0 L25.3 54.0 L22.9 51.0 L21.3 48.0 L21.1 45.0 L22.3 42.0 L24.6 39.0 L27.3 36.0 L29.6 33.0 L30.9 30.0 L30.7 27.0 L29.2 24.0 L26.8 21.0 L24.1 18.0 L22.0 15.0 L21.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(18 26 72)\"/><path d=\"M40.0 72.0 L42.6 69.0 L44.4 66.0 L45.0 63.0 L44.1 60.0 L42.0 57.0 L39.3 54.0 L36.9 51.0 L35.3 48.0 L35.1 45.0 L36.3 42.0 L38.6 39.0 L41.3 36.0 L43.6 33.0 L44.9 30.0 L44.7 27.0 L43.2 24.0 L40.8 21.0 L38.1 18.0 L36.0 15.0 L35.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(18 40 72)\"/><path d=\"M54.0 72.0 L56.6 69.0 L58.4 66.0 L59.0 63.0 L58.1 60.0 L56.0 57.0 L53.3 54.0 L50.9 51.0 L49.3 48.0 L49.1 45.0 L50.3 42.0 L52.6 39.0 L55.3 36.0 L57.6 33.0 L58.9 30.0 L58.7 27.0 L57.2 24.0 L54.8 21.0 L52.1 18.0 L50.0 15.0 L49.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(18 54 72)\"/><path d=\"M68.0 72.0 L70.6 69.0 L72.4 66.0 L73.0 63.0 L72.1 60.0 L70.0 57.0 L67.3 54.0 L64.9 51.0 L63.3 48.0 L63.1 45.0 L64.3 42.0 L66.6 39.0 L69.3 36.0 L71.6 33.0 L72.9 30.0 L72.7 27.0 L71.2 24.0 L68.8 21.0 L66.1 18.0 L64.0 15.0 L63.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(18 68 72)\"/></g><circle cx=\"50\" cy=\"50\" r=\"44\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\"/></svg><figcaption><b>Let hældning</b><br>0–1,3 m/s</figcaption></figure><figure><svg viewBox=\"0 0 100 100\" class=\"dk-mir\" aria-hidden=\"true\"><defs><clipPath id=\"@@c32\"><circle cx=\"50\" cy=\"50\" r=\"44\"/></clipPath></defs><g clip-path=\"url(#@@c32)\"><rect x=\"0\" y=\"72\" width=\"100\" height=\"28\" fill=\"#d9d9d9\"/><path d=\"M26.0 72.0 L28.6 69.0 L30.4 66.0 L31.0 63.0 L30.1 60.0 L28.0 57.0 L25.3 54.0 L22.9 51.0 L21.3 48.0 L21.1 45.0 L22.3 42.0 L24.6 39.0 L27.3 36.0 L29.6 33.0 L30.9 30.0 L30.7 27.0 L29.2 24.0 L26.8 21.0 L24.1 18.0 L22.0 15.0 L21.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(32 26 72)\"/><path d=\"M40.0 72.0 L42.6 69.0 L44.4 66.0 L45.0 63.0 L44.1 60.0 L42.0 57.0 L39.3 54.0 L36.9 51.0 L35.3 48.0 L35.1 45.0 L36.3 42.0 L38.6 39.0 L41.3 36.0 L43.6 33.0 L44.9 30.0 L44.7 27.0 L43.2 24.0 L40.8 21.0 L38.1 18.0 L36.0 15.0 L35.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(32 40 72)\"/><path d=\"M54.0 72.0 L56.6 69.0 L58.4 66.0 L59.0 63.0 L58.1 60.0 L56.0 57.0 L53.3 54.0 L50.9 51.0 L49.3 48.0 L49.1 45.0 L50.3 42.0 L52.6 39.0 L55.3 36.0 L57.6 33.0 L58.9 30.0 L58.7 27.0 L57.2 24.0 L54.8 21.0 L52.1 18.0 L50.0 15.0 L49.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(32 54 72)\"/><path d=\"M68.0 72.0 L70.6 69.0 L72.4 66.0 L73.0 63.0 L72.1 60.0 L70.0 57.0 L67.3 54.0 L64.9 51.0 L63.3 48.0 L63.1 45.0 L64.3 42.0 L66.6 39.0 L69.3 36.0 L71.6 33.0 L72.9 30.0 L72.7 27.0 L71.2 24.0 L68.8 21.0 L66.1 18.0 L64.0 15.0 L63.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(32 68 72)\"/></g><circle cx=\"50\" cy=\"50\" r=\"44\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\"/></svg><figcaption><b>Tydelig hældning</b><br>1,3–2,2 m/s</figcaption></figure><figure><svg viewBox=\"0 0 100 100\" class=\"dk-mir\" aria-hidden=\"true\"><defs><clipPath id=\"@@c48\"><circle cx=\"50\" cy=\"50\" r=\"44\"/></clipPath></defs><g clip-path=\"url(#@@c48)\"><rect x=\"0\" y=\"72\" width=\"100\" height=\"28\" fill=\"#d9d9d9\"/><path d=\"M26.0 72.0 L28.6 69.0 L30.4 66.0 L31.0 63.0 L30.1 60.0 L28.0 57.0 L25.3 54.0 L22.9 51.0 L21.3 48.0 L21.1 45.0 L22.3 42.0 L24.6 39.0 L27.3 36.0 L29.6 33.0 L30.9 30.0 L30.7 27.0 L29.2 24.0 L26.8 21.0 L24.1 18.0 L22.0 15.0 L21.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(48 26 72)\"/><path d=\"M40.0 72.0 L42.6 69.0 L44.4 66.0 L45.0 63.0 L44.1 60.0 L42.0 57.0 L39.3 54.0 L36.9 51.0 L35.3 48.0 L35.1 45.0 L36.3 42.0 L38.6 39.0 L41.3 36.0 L43.6 33.0 L44.9 30.0 L44.7 27.0 L43.2 24.0 L40.8 21.0 L38.1 18.0 L36.0 15.0 L35.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(48 40 72)\"/><path d=\"M54.0 72.0 L56.6 69.0 L58.4 66.0 L59.0 63.0 L58.1 60.0 L56.0 57.0 L53.3 54.0 L50.9 51.0 L49.3 48.0 L49.1 45.0 L50.3 42.0 L52.6 39.0 L55.3 36.0 L57.6 33.0 L58.9 30.0 L58.7 27.0 L57.2 24.0 L54.8 21.0 L52.1 18.0 L50.0 15.0 L49.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(48 54 72)\"/><path d=\"M68.0 72.0 L70.6 69.0 L72.4 66.0 L73.0 63.0 L72.1 60.0 L70.0 57.0 L67.3 54.0 L64.9 51.0 L63.3 48.0 L63.1 45.0 L64.3 42.0 L66.6 39.0 L69.3 36.0 L71.6 33.0 L72.9 30.0 L72.7 27.0 L71.2 24.0 L68.8 21.0 L66.1 18.0 L64.0 15.0 L63.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(48 68 72)\"/></g><circle cx=\"50\" cy=\"50\" r=\"44\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\"/></svg><figcaption><b>45°</b><br>2,2–3,6 m/s</figcaption></figure><figure><svg viewBox=\"0 0 100 100\" class=\"dk-mir\" aria-hidden=\"true\"><defs><clipPath id=\"@@c62\"><circle cx=\"50\" cy=\"50\" r=\"44\"/></clipPath></defs><g clip-path=\"url(#@@c62)\"><rect x=\"0\" y=\"72\" width=\"100\" height=\"28\" fill=\"#d9d9d9\"/><path d=\"M26.0 72.0 L28.6 69.0 L30.4 66.0 L31.0 63.0 L30.1 60.0 L28.0 57.0 L25.3 54.0 L22.9 51.0 L21.3 48.0 L21.1 45.0 L22.3 42.0 L24.6 39.0 L27.3 36.0 L29.6 33.0 L30.9 30.0 L30.7 27.0 L29.2 24.0 L26.8 21.0 L24.1 18.0 L22.0 15.0 L21.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(62 26 72)\"/><path d=\"M40.0 72.0 L42.6 69.0 L44.4 66.0 L45.0 63.0 L44.1 60.0 L42.0 57.0 L39.3 54.0 L36.9 51.0 L35.3 48.0 L35.1 45.0 L36.3 42.0 L38.6 39.0 L41.3 36.0 L43.6 33.0 L44.9 30.0 L44.7 27.0 L43.2 24.0 L40.8 21.0 L38.1 18.0 L36.0 15.0 L35.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(62 40 72)\"/><path d=\"M54.0 72.0 L56.6 69.0 L58.4 66.0 L59.0 63.0 L58.1 60.0 L56.0 57.0 L53.3 54.0 L50.9 51.0 L49.3 48.0 L49.1 45.0 L50.3 42.0 L52.6 39.0 L55.3 36.0 L57.6 33.0 L58.9 30.0 L58.7 27.0 L57.2 24.0 L54.8 21.0 L52.1 18.0 L50.0 15.0 L49.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(62 54 72)\"/><path d=\"M68.0 72.0 L70.6 69.0 L72.4 66.0 L73.0 63.0 L72.1 60.0 L70.0 57.0 L67.3 54.0 L64.9 51.0 L63.3 48.0 L63.1 45.0 L64.3 42.0 L66.6 39.0 L69.3 36.0 L71.6 33.0 L72.9 30.0 L72.7 27.0 L71.2 24.0 L68.8 21.0 L66.1 18.0 L64.0 15.0 L63.0 12.0\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" transform=\"rotate(62 68 72)\"/></g><circle cx=\"50\" cy=\"50\" r=\"44\" fill=\"none\" stroke=\"#111\" stroke-width=\"3\"/></svg><figcaption><b>55° / flad</b><br>3,6–5,4 m/s</figcaption></figure></div>";
+function cardWs(){const v=S.settings.cardWind;return Number.isFinite(v)&&v>0?v:4;}
+function cardHtml(pre){
+  const {ctx}=S.last,p=ctx.pr,ws=cardWs(),rows=dopeRows(CARD_R),supp=!!ctx.cond.supp;
+  const d=new Date().toLocaleDateString('da-DK');
+  const shade=r=>r.out?'':r.mach<1?' dk-c':r.mach<1.2?' dk-w':'';
+  const cells=r=>{if(!r)return '<td class="d"></td><td></td><td></td><td></td>';
+    if(r.out)return `<td class="d${''}">${r.x}</td><td class="e">–</td><td>–</td><td></td>`;
+    const m=cardManual(p,r.x,supp),bk=m!=null?fmt(m,1):'';
+    return `<td class="d${shade(r)}">${r.x}</td><td class="e">${fmt(r.elevDial,1)}</td><td>${fmt(Math.abs(r.wind1)*ws,1)}</td><td class="bk${pre==='scr'&&S.cardEdit===r.x?' sel':''}" data-bk="${r.x}">${bk}</td>`;};
+  const half=Math.ceil(rows.length/2);let body='';
+  for(let i=0;i<half;i++)body+=`<tr>${cells(rows[i])}${cells(rows[i+half]).replace('<td class="d','<td class="split d')}</tr>`;
+  const dr=x=>{const r=rows.find(q=>q.x===x);return r&&!r.out?lr(r.drift,1):'–';};
+  const elU=(p.clickFactor||1)!==1?'tårn':'mil';
+  return `<div class="dk"><div class="dk-sheet">
+<section class="dk-panel"><div class="dk-tbox">
+<table class="dk-hdr">
+<tr><td class="k">Riffel</td><td class="v" colspan="3">RPR .308 Win · 20" · 1:10" · ${supp?'med':'uden'} lyddæmper</td></tr>
+<tr><td class="k">Ammo</td><td class="v">${esc(p.name)}</td><td class="k">Lot</td><td class="v">${p.lot?esc(p.lot):'–'}</td></tr>
+<tr><td class="k">Vægt</td><td class="v">${fmtR(p.weight)} grs</td><td class="k">V₀</td><td class="v">${fmt(ctx.mv,0)} m/s</td></tr>
+<tr><td class="k">Nul</td><td class="v">${p.zeroRange} m</td><td class="k">Dato</td><td class="v">${d}</td></tr>
+<tr><td class="k">Temp</td><td class="v">${fmt(ctx.cond.T,0)} °C</td><td class="k">Tryk</td><td class="v">${fmt(ctx.cond.P,0)} hPa</td></tr>
+</table>
+<table class="dk-t"><thead>
+<tr><th>Afst</th><th>Elev</th><th>Vind</th><th>Bekr<span class="dk-full">æftet</span></th><th class="split">Afst</th><th>Elev</th><th>Vind</th><th>Bekr<span class="dk-full">æftet</span></th></tr>
+<tr><th>m</th><th><small>${elU} op</small></th><th><small>${fmt(ws,1)} m/s</small></th><th><small>${elU}</small></th><th class="split">m</th><th><small>${elU} op</small></th><th><small>${fmt(ws,1)} m/s</small></th><th><small>${elU}</small></th></tr>
+</thead><tbody>${body}</tbody></table>
+<div class="dk-key"><span><i class="dk-w"></i>under Mach 1,2</span><span><i class="dk-c"></i>under Mach 1,0</span><span>Vind: mil ved fuld værdi (kl. 3/9), hold i retiklen.</span><span>Fast højredrift (spin drift og jordrotation) — hold oveni: ${dr(500)} på 500 m · ${dr(700)} på 700 m · ${dr(900)} på 900 m.</span><span>Bekræftet: elevation der faktisk ramte.</span></div>
+</div></section>
+<section class="dk-panel dk-right">
+<div><h2 class="dk-h">Korrigeret vindstyrke for vinkel · m/s</h2>${CARD_CLOCK}</div>
+<div class="dk-mbox"><h3>Aflæsning af mirage · fokusér på 2/3 af afstanden</h3>${CARD_MIR.split('@@').join(pre)}</div>
+<table class="dk-est"><caption>Vurdering af vind</caption>
+<tr><th>m/s</th><th>Synlig virkning i naturen</th></tr>
+<tr><td>&lt;0,3</td><td>Røg stiger lodret. Intet græs bevæger sig.</td></tr>
+<tr><td>0,3–1,5</td><td>Røg driver med vinden. Blade rører sig svagt.</td></tr>
+<tr><td>1,6–3,3</td><td>Vind mærkes i ansigtet. Blade i bevægelse.</td></tr>
+<tr><td>3,4–5,4</td><td>Blade og kviste i konstant bevægelse. Trætoppe rører sig.</td></tr>
+<tr><td>5,5–7,9</td><td>Små grene bevæger sig. Støv og løst løv hvirvles op.</td></tr>
+<tr><td>8,0–10,7</td><td>Store grene og små træer svajer.</td></tr>
+<tr><td>10,8–13,8</td><td>Hele træer i bevægelse. Besværligt at gå.</td></tr>
+</table>
+<p class="dk-foot">Vind i tabellen er fuld værdi (90°). Skalér med vinduret ved andre vinkler. Udfyld Bekræftet med skudte værdier, ikke beregnede.</p>
+</section></div></div>`;
+}
+function cardKey(p,supp){return p.id+'|'+(p.lot||'')+'|'+(supp?1:0);}
+// Gemte værdier: {v,T,P,ts}. Ældre værdier er et rent tal uden atmosfære og tæller ikke i V₀-rettelsen.
+function cardEntry(p,x,supp){const m=(S.settings.cardBk||{})[cardKey(p,supp)];const e=m&&m[x];if(e==null)return null;return typeof e==='number'?{v:e}:e;}
+function cardManual(p,x,supp){const e=cardEntry(p,x,supp);return e&&Number.isFinite(e.v)?e.v:null;}
+function cardTruing(p,supp){
+  const m=(S.settings.cardBk||{})[cardKey(p,supp)]||{},f=p.clickFactor||1;
+  const all=Object.entries(m).map(([x,e])=>Object.assign({x:+x},typeof e==='number'?{v:e}:e));
+  const legacy=all.filter(e=>!Number.isFinite(e.T)).length;
+  const use=all.filter(e=>Number.isFinite(e.T)&&Number.isFinite(e.P)&&e.x>=400&&e.x<=750);
+  const mvs=use.map(e=>mvForShot(p,{elevTrue:e.v/f,hit:{x:0,y:0},call:{x:0,y:0},T:e.T,P:e.P,supp,dist:e.x})).filter(v=>v!=null).sort((a,b)=>a-b);
+  return {n:use.length,legacy,mvs,med:mvs.length>=3?mvs[Math.floor(mvs.length/2)]:null,T:use.length?mean(use.map(e=>e.T)):null};
+}
+function cardTruingHtml(){
+  if(!S.last)return '';
+  const {ctx}=S.last,p=ctx.pr,supp=!!ctx.cond.supp,t=cardTruing(p,supp);
+  let o=`<div class="card"><h2>V₀ fra bekræftede værdier</h2>`;
+  if(t.med!=null){o+=`<div class="meta">Dine bekræftede elevationer på 400–750 m passer bedst med <b>V₀ ${fmt(t.med,0)} m/s</b> (nu ${fmt(p.mv,0)}) ud fra ${t.mvs.length} værdier ved ca. ${fmt(t.T,0)} °C.</div>`;
+    o+=Math.abs(t.med-p.mv)>=3?`<button class="btn wide" id="cwTrue" data-mv="${t.med.toFixed(1)}" data-t="${t.T.toFixed(0)}" style="margin-top:8px">Brug V₀ ${fmt(t.med,0)} m/s (målt ved ${fmt(t.T,0)} °C)</button>`:'<div class="meta">V₀ stemmer allerede inden for 3 m/s.</div>';}
+  else o+=`<div class="meta">Indtast mindst 3 bekræftede værdier på 400–750 m for at rette V₀ (nu ${t.n} af 3).</div>`;
+  if(t.legacy)o+=`<div class="hint">${t.legacy} ${t.legacy===1?'værdi':'værdier'} er gemt uden temperatur og tryk og tæller ikke med. Tryk på feltet og gem igen med den atmosfære, du skød i.</div>`;
+  return o+`<div class="hint">Hver værdi gemmes med temperatur og tryk fra Input. Sæt atmosfæren til den, du skød i, før du gemmer.</div></div>`;
+}
+function cardTruingBind(){const b=$('#cwTrue');if(!b)return;b.onclick=async()=>{const p=S.last.ctx.pr,n=normProfile(Object.assign({},p,{mv:+b.dataset.mv,mvT:+b.dataset.t}));
+  if(await dbPut('profiles',n)){S.profiles=S.profiles.map(q=>q.id===n.id?n:q);compute();toast('V₀ opdateret til '+fmt(n.mv,0)+' m/s');}};}
+function cardRedraw(){if(!S.last)return;$('#cardWrap').innerHTML=cardHtml('scr');$('#cardTrue').innerHTML=cardTruingHtml();cardTruingBind();}
+function cardEdClose(){S.cardEdit=null;$('#cardEd').innerHTML='';cardRedraw();}
+function cardEdOpen(x){
+  if(!S.last)return;
+  const {ctx}=S.last,p=ctx.pr,supp=!!ctx.cond.supp,r=dopeRows([x])[0],m=cardManual(p,x,supp),en=cardEntry(p,x,supp);
+  const elU=(p.clickFactor||1)!==1?'tårn':'mil';
+  S.cardEdit=x;
+  $('#cardEd').innerHTML=`<div class="card"><h2>Bekræftet · ${x} m</h2>
+  ${nf('cw_bk','cardbk','Elevation der ramte',elU+' op',{min:-5,max:40,step:0.1,dec:1},m!=null?m:(r&&!r.out?+r.elevDial.toFixed(1):0))}
+  <div class="meta">Beregnet ${r&&!r.out?fmt(r.elevDial,1):'–'}${m!=null?' · gemt '+fmt(m,1)+(Number.isFinite(en.T)?` ved ${fmt(en.T,0)} °C og ${fmt(en.P,0)} hPa`:' uden atmosfære'):''}<br>Gemmes med <b>${fmt(ctx.cond.T,0)} °C og ${fmt(ctx.cond.P,0)} hPa</b> fra Input — ret dem først, hvis du skød i anden luft.<br>Gælder ${esc(p.name)}${lotTxt(p)} · ${supp?'med':'uden'} lyddæmper.</div>
+  <div class="row" style="margin-top:10px"><button class="btn pri" id="cwSave">Gem</button>${m!=null?'<button class="btn danger" id="cwClear">Ryd</button>':''}<button class="btn" id="cwClose">Luk</button></div></div>`;
+  $('#cwSave').onclick=async()=>{const f=readField($('#cw_bk'));if(!f.ok||f.v==null){toast('Ret det røde felt',true);return;}
+    const k=cardKey(p,supp),all=S.settings.cardBk=S.settings.cardBk||{};(all[k]=all[k]||{})[x]={v:+f.v.toFixed(2),T:ctx.cond.T,P:ctx.cond.P,ts:Date.now()};await saveSettings();toast(x+' m gemt');cardEdClose();};
+  if($('#cwClear'))$('#cwClear').onclick=async()=>{const k=cardKey(p,supp),all=S.settings.cardBk||{};if(all[k]){delete all[k][x];if(!Object.keys(all[k]).length)delete all[k];}await saveSettings();toast(x+' m ryddet');cardEdClose();};
+  $('#cwClose').onclick=cardEdClose;
+  cardRedraw();
+  $('#cardEd').scrollIntoView({block:'start',behavior:'smooth'});
+}
+$('#cardWrap').addEventListener('click',e=>{const t=e.target.closest('td[data-bk]');if(t)cardEdOpen(+t.dataset.bk);});
+function renderCard(){
+  if(!$('#cw_ws'))$('#cardForm').innerHTML=nf('cw_ws','card','Vind på kortet','m/s, fuld værdi',{min:0.5,max:15,step:0.5,dec:1},cardWs());
+  if(!S.last){$('#cardWrap').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Input.</div>';$('#cardTrue').innerHTML='';return;}
+  cardRedraw();
+}
+function onCardInput(){const r=readField($('#cw_ws'));if(!r.ok||r.v==null)return;S.settings.cardWind=r.v;saveSettings();cardRedraw();}
+$('#printCardA4').onclick=async()=>{
+  if(!S.last){toast('Ingen gyldig løsning at udskrive',true);return;}
+  $('#pageStyle').textContent='@page{size:297mm 210mm;margin:7mm}';
+  $('#printArea').innerHTML=cardHtml('prt');
+  setTimeout(()=>window.print(),50);
+};
+
 /* ---------- Hold / retikel ---------- */
 function reticleBase(BOT){
   const W=8,TOP=-4,sw=0.04;let s='';
@@ -1517,7 +1725,7 @@ function reticleSVG(hx,hy,f0,f1){
 }
 function renderHold(){
   $$('#holdSeg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===S.settings.holdMode));
-  if(!S.last){$('#holdSvg').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Løsning.</div>';$('#holdTxt').textContent='';return;}
+  if(!S.last){$('#holdSvg').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Input.</div>';$('#holdTxt').textContent='';return;}
   const {sol}=S.last,dial=S.settings.holdMode==='dial';
   // Målet placeres på retikelpunktet, hvor kuglen lander: elevation nedad, korrektion R => punkt til venstre.
   const hy=dial?0:Math.max(0,sol.elev),mid=(sol.fMin+sol.fMax)/2;
@@ -1534,7 +1742,7 @@ function renderProfiles(){
   const tpl=draft?`<div class="field"><label for="p_tpl">Udfyld projektildata fra</label><select id="p_tpl"><option value="">Intet — jeg skriver selv</option>${TEMPLATES.map(t=>`<option value="${t.key}">${t.label}</option>`).join('')}</select><div class="hint">Udfylder kun navn, vægt og G7-BK (publicerede værdier — verificér). Mundingshastighed skriver du selv.</div></div>`:'';
   $('#v-prof').innerHTML=`
   <div class="card"><h2>${draft?'Ny ammunition':'Ammunition'}</h2>
-    <div class="hint" style="margin:-4px 0 12px">${draft?'Skriv oplysningerne fra æsken og dine egne målinger. Felter uden værdi markeres rødt ved gem.':'Retter den ammunition, der er valgt under Løsning.'}</div>
+    <div class="hint" style="margin:-4px 0 12px">${draft?'Skriv oplysningerne fra æsken og dine egne målinger. Felter uden værdi markeres rødt ved gem.':'Retter den ammunition, der er valgt under Input.'}</div>
     ${tpl}
     <div class="field"><label for="p_name">Ammunition (producent og betegnelse)</label><input class="txt" id="p_name" value="${esc(p.name)}" maxlength="60" placeholder="fx Lapua Scenar-L 175 grs"></div>
     <div class="field"><label for="p_lot">Lotnummer</label><input class="txt" id="p_lot" value="${esc(p.lot)}" maxlength="30" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="fra æsken"></div>
@@ -1552,7 +1760,7 @@ function renderProfiles(){
     [['p_weight',t.weight,1],['p_bc',t.bc,3]].forEach(([id,v,d])=>{const f=$('#'+id);f.value=fmtIn(v,d);readField(f);});};
   const pc=$('#pCancel');if(pc)pc.onclick=()=>{draft=null;renderProfiles();};
   const upd=()=>{const a=readField($('#p_boxMv')),b=readField($('#p_boxBarrel'));const e=a.ok&&b.ok?boxEstimate({boxMv:a.v,boxBarrel:b.v}):null;
-    $('#boxEst').textContent=e==null?'Udfyld æskens hastighed og testløb for et estimat til dit 20"-løb.':`Estimat til 20": ${fmt(e,0)} m/s (${MV_PER_IN.toString().replace('.',',')} m/s pr. tomme). Erstattes af kronografmåling.`;$('#boxUse').disabled=e==null;$('#boxUse').dataset.v=e==null?'':e;};
+    $('#boxEst').textContent=e==null?'Udfyld æskens hastighed og testløb for et estimat til dit 20"-løb.':`${a.v>1300?fmt(a.v,0)+' fps = '+fmt(a.v*FPS,0)+' m/s. ':''}Estimat til 20": ${fmt(e,0)} m/s (${MV_PER_IN.toString().replace('.',',')} m/s pr. tomme). Erstattes af kronografmåling.`;$('#boxUse').disabled=e==null;$('#boxUse').dataset.v=e==null?'':e;};
   $('#p_boxMv').addEventListener('input',upd);$('#p_boxBarrel').addEventListener('input',upd);upd();
   $('#boxUse').onclick=()=>{const v=+$('#boxUse').dataset.v;if(!Number.isFinite(v))return;const f=$('#p_mv');f.value=fmtIn(Math.round(v),1);readField(f);toast('Estimat sat som V₀ — husk at gemme');};
   $('#pVer').onclick=e=>{const on=!e.currentTarget.classList.contains('on');e.currentTarget.classList.toggle('on',on);e.currentTarget.textContent=on?'✓ BK og V₀ verificeret mod egne data':'BK og V₀ ikke verificeret mod egne data';};
@@ -1621,238 +1829,6 @@ async function renderStore(){
 let setT;
 function onSettingsInput(){clearTimeout(setT);setT=setTimeout(()=>{const {ok,vals}=readForm('set');if(!ok)return;S.settings.lat=vals.set_lat;S.settings.lon=vals.set_lon;saveSettings();compute();},400);}
 
-/* ---------- Holdtræning ---------- */
-const TR_DEF={mode:'both',maxDist:700,maxWind:8,tol:0.2,limit:0};
-const TR={sc:null,ans:null,t0:0,done:false,res:null,log:[],timer:null,hint:false,bot:12,botKey:''};
-function trSet(){return Object.assign({},TR_DEF,S.settings.train||{});}
-function trSave(k,v){S.settings.train=Object.assign(trSet(),{[k]:v});saveSettings();trStop();TR.sc=null;renderTrain();}
-function trStop(){if(TR.timer){clearInterval(TR.timer);TR.timer=null;}}
-function trBot(ctx,st){
-  const key=JSON.stringify([ctx.pr.id,ctx.mv,ctx.pr.bc,st.maxDist,st.mode,ctx.cond.T,ctx.cond.P]);
-  if(TR.botKey!==key){let e=0;try{const s=solvePoint(ctx,st.maxDist,[{min:0,max:0,clock:3}]);e=s?s.elev:10;}catch(x){e=10;}
-    TR.bot=st.mode==='both'?Math.max(6,Math.ceil(e+1.5)):4;TR.botKey=key;}
-  return TR.bot;
-}
-function trNew(){
-  trStop();
-  const st=trSet(),p=active();if(!p){TR.sc=null;renderTrain();return;}
-  const ctx=buildCtx(p,curCond());
-  const steps=Math.floor((st.maxDist-100)/25);
-  const dist=100+25*Math.floor(Math.random()*(steps+1));
-  const ws=1+Math.floor(Math.random()*st.maxWind);
-  const clock=1+Math.floor(Math.random()*12);
-  const sol=solvePoint(ctx,dist,[{min:ws,max:ws,clock}]);
-  if(!sol){toast('Kunne ikke regne scenariet',true);return;}
-  trBot(ctx,st);
-  TR.sc={dist,ws,clock,mode:st.mode,tol:st.tol,limit:st.limit,corE:st.mode==='both'?sol.elev:0,corW:(sol.fMin+sol.fMax)/2,drift:sol.drift,w1:Math.abs(sol.wind1),profileId:p.id,ammo:p.name+(p.lot?' · lot '+p.lot:'')};
-  TR.ans={e:0,w:0};TR.done=false;TR.res=null;TR.hint=false;TR.t0=Date.now();
-  if(st.limit>0)TR.timer=setInterval(trTick,200);
-  renderTrain();
-}
-function trTick(){
-  if(!TR.sc||TR.done){trStop();return;}
-  const left=TR.sc.limit-(Date.now()-TR.t0)/1000,el=$('#trClock');
-  if(el){el.textContent=left>0?fmt(left,1)+' s':'0,0 s';el.classList.toggle('late',left<=3);}
-  if(left<=0)trSubmit(true);
-}
-function clockSVG(c){
-  const a=c*Math.PI/6,sx=Math.sin(a)*40,sy=-Math.cos(a)*40,ex=Math.sin(a)*9,ey=-Math.cos(a)*9;
-  const dx=(ex-sx),dy=(ey-sy),L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,bx=ex-ux*11,by=ey-uy*11;
-  const nums=[[12,0,-38],[3,40,4],[6,0,45],[9,-40,4]].map(n=>`<text x="${n[1]}" y="${n[2]}" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">${n[0]}</text>`).join('');
-  return `<svg viewBox="-56 -56 112 112" class="clockf" aria-label="Vind fra kl. ${c}"><circle r="48" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>${nums}<line x1="0" y1="-6" x2="0" y2="-30" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity=".6"/><circle r="3" fill="currentColor"/><line x1="${sx}" y1="${sy}" x2="${bx}" y2="${by}" stroke="var(--mark)" stroke-width="4"/><polygon points="${ex},${ey} ${bx-uy*7},${by+ux*7} ${bx+uy*7},${by-ux*7}" fill="var(--mark)"/></svg>`;
-}
-function trReticle(){
-  const sc=TR.sc,BOT=TR.bot,W=8;
-  const r=reticleBase(BOT);let o='';
-  const ux=-TR.ans.w,uy=TR.ans.e;
-  const cross=(x,y,col)=>`<g stroke="${col}" stroke-width="0.11"><line x1="${x-0.4}" y1="${y-0.4}" x2="${x+0.4}" y2="${y+0.4}"/><line x1="${x-0.4}" y1="${y+0.4}" x2="${x+0.4}" y2="${y-0.4}"/></g>`;
-  if(TR.done){
-    const cx=-sc.corW,cy=sc.corE;
-    o+=`<line x1="${ux}" y1="${uy}" x2="${cx}" y2="${cy}" stroke="var(--mark)" stroke-width="0.05" stroke-dasharray="0.15,0.1"/>`;
-    o+=`<circle cx="${cx}" cy="${cy}" r="${Math.max(sc.tol,0.15)}" fill="var(--fork)" stroke="var(--mark)" stroke-width="0.05"/><circle cx="${cx}" cy="${cy}" r="0.55" fill="none" stroke="var(--mark)" stroke-width="0.1"/><circle cx="${cx}" cy="${cy}" r="0.07" fill="var(--mark)"/>`;
-  }
-  o+=cross(ux,uy,'var(--user)');
-  return `<svg class="ret trret" id="trSvg" viewBox="${-W-1} ${r.top-1} ${2*W+2} ${BOT-r.top+2}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Træningsretikel">${r.s}${o}</svg>`;
-}
-function trAnsTxt(){const a=TR.ans;return TR.sc.mode==='both'?`elev ${fmt(a.e,1)} · vind ${lr(a.w)}`:`vind ${lr(a.w)}`;}
-function trSetAns(e,w){
-  if(TR.done)return;
-  const sc=TR.sc;
-  TR.ans.e=sc.mode==='both'?Math.max(0,Math.min(TR.bot,Math.round(e*10)/10)):0;
-  TR.ans.w=Math.max(-8,Math.min(8,Math.round(w*10)/10));
-  $('#trSvgBox').innerHTML=trReticle();bindTrSvg();
-  $('#trAns').textContent=trAnsTxt();
-}
-function bindTrSvg(){
-  const svg=$('#trSvg');if(!svg||TR.done)return;
-  svg.addEventListener('click',ev=>{
-    const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;
-    const m=svg.getScreenCTM();if(!m)return;const q=pt.matrixTransform(m.inverse());
-    trSetAns(q.y,-q.x);
-  });
-}
-async function trSubmit(late){
-  if(!TR.sc||TR.done)return;
-  trStop();
-  const sc=TR.sc,a=TR.ans,t=(Date.now()-TR.t0)/1000;
-  const errE=sc.mode==='both'?a.e-sc.corE:0,errW=a.w-sc.corW,eps=1e-9;
-  const isLate=!!late||(sc.limit>0&&t>sc.limit);
-  const hit=!isLate&&Math.abs(errE)<=sc.tol+eps&&Math.abs(errW)<=sc.tol+eps;
-  TR.done=true;
-  TR.res={errE,errW,t,late:isLate,hit};
-  const diag=hit?[]:trDiag().map(d=>d.code);
-  const rec={id:uid(),_v:SCHEMA,ts:Date.now(),type:'hold',profileId:sc.profileId,ammo:sc.ammo,dist:sc.dist,ws:sc.ws,clock:sc.clock,mode:sc.mode,tol:sc.tol,limit:sc.limit,
-    ansE:a.e,ansW:a.w,corE:+sc.corE.toFixed(3),corW:+sc.corW.toFixed(3),errE:+errE.toFixed(3),errW:+errW.toFixed(3),t:+t.toFixed(1),late:isLate,hint:TR.hint,hit,drift:+(sc.drift||0).toFixed(3),diag};
-  if(await dbPut('traininglog',rec))TR.log.push(rec);
-  renderTrain();
-}
-function impactTxt(errE,errW,dist,mode){
-  const cm=m=>fmt(Math.abs(m)*dist/10,0)+' cm';const parts=[];
-  if(mode==='both'&&Math.abs(errE)>=0.05)parts.push(cm(errE)+(errE>0?' højt':' lavt'));
-  if(Math.abs(errW)>=0.05)parts.push(cm(errW)+(errW>0?' til højre':' til venstre'));
-  return parts.length?'Træf ca. '+parts.join(' og '):'Træf i centrum';
-}
-function clockInfo(c){
-  const f=Math.abs(Math.sin(c*Math.PI/6));
-  const side=c>0&&c<6?'højre':c>6&&c<12?'venstre':null;
-  const name=f>0.99?'fuld værdi':f>0.8?'ca. 87 % — næsten fuld værdi':f>0.4?'halv værdi':'ingen sidevind';
-  return {f,side,name};
-}
-function elevAt(ctx,dists){
-  const so=suppOff(ctx),ds=ctx.pr.dropScale||1;
-  return runCtx(ctx,dists,NOWIND).map(b=>({x:b.x,e:corrMil(b.y,b.x)*ds-so.up}));
-}
-const DIAG_LBL={late:'Tiden løb ud',noelev:'Ingen elevation',wrongdist:'Elevation fra forkert afstand',elev:'Elevation for meget/lidt',ghost:'Vind holdt uden sidevind',nowind:'Ingen vind holdt',side:'Forkert side',full:'Fuld værdi ved halv',half:'Halv værdi ved fuld',under:'For lidt vind',over:'For meget vind'};
-function trDiag(){
-  const sc=TR.sc,a=TR.ans,r=TR.res,tol=sc.tol,eps=1e-9,ci=clockInfo(sc.clock),out=[];
-  const side=ci.side,holdDir=side==='højre'?'H':'V',ptSide=side==='højre'?'venstre':'højre',cross=sc.ws*ci.f;
-  const drift=sc.drift||0,windOnly=sc.corW-drift;
-  if(r.late)out.push({code:'late',html:'<p><b>Tiden løb ud</b>, før du afgav holdet. Øv samme afstande uden tidsgrænse, til regnestykket sidder, og slå tidsgrænsen til igen.</p>'});
-  if(sc.mode==='both'&&Math.abs(r.errE)>tol+eps){
-    let near=null;const p=active();
-    if(p){try{const ctx=buildCtx(p,curCond());const ds=[];for(let d=Math.max(100,sc.dist-150);d<=sc.dist+150;d+=25)if(d!==sc.dist)ds.push(d);
-      near=elevAt(ctx,ds).map(o=>({...o,d:Math.abs(o.e-a.e)})).sort((x,y)=>x.d-y.d)[0];if(near&&near.d>0.06)near=null;}catch(e){}}
-    if(a.e<0.05&&sc.corE>0.3)out.push({code:'noelev',html:`<p><b>Du holdt ingen elevation.</b> Kuglen falder ${fmt(sc.corE,1)} mil på ${sc.dist} m, så uden hold rammer du ca. ${fmt(sc.corE*sc.dist/10,0)} cm lavt.</p>`});
-    else out.push({code:near?'wrongdist':'elev',html:`<p><b>Du holdt ${r.errE>0?'for meget':'for lidt'} elevation</b> — ${fmt(a.e,1)} i stedet for ${fmt(sc.corE,1)} mil. ${fmt(Math.abs(r.errE),1)} mil på ${sc.dist} m er ${fmt(Math.abs(r.errE)*sc.dist/10,0)} cm, så kuglen går ${r.errE>0?'over':'under'}.${near?` Dit hold passer til <b>${near.x} m</b> — du har brugt linjen for en forkert afstand. Tjek afstanden og læs den rigtige linje i skydetabellen.`:''}</p>`});
-  }
-  if(Math.abs(r.errW)>tol+eps){
-    const wsign=side==='højre'?1:-1,full=wsign*sc.ws*sc.w1+drift,half=wsign*sc.ws*sc.w1*0.5+drift,dCorr=Math.abs(a.w-sc.corW);
-    const fits=c=>{const d=Math.abs(a.w-c);return d<=tol+eps&&d*2<dCorr&&Math.abs(c-sc.corW)>1.5*tol;};
-    if(!side)out.push({code:'ghost',html:`<p><b>Du holdt ${lr(a.w)}, men der er ingen sidevind.</b> Vind fra kl. ${sc.clock} blæser langs skudlinjen.${Math.abs(drift)>=0.05?` Der skal kun holdes for den faste højredrift: ${lr(drift)}.`:''}</p>`});
-    else if(Math.abs(a.w)<0.05)out.push({code:'nowind',html:`<p><b>Du holdt ikke for vind.</b> ${fmt(cross,1)} m/s sidevind flytter kuglen ${fmt(Math.abs(windOnly)*sc.dist/10,0)} cm mod ${ptSide} på ${sc.dist} m.</p>`});
-    else if(Math.sign(a.w)!==Math.sign(sc.corW)&&Math.abs(sc.corW)>=0.1)out.push({code:'side',html:`<p><b>Du holdt til forkert side</b> (${lr(a.w)}). Vinden kommer fra ${side} og skubber kuglen mod ${ptSide}. Du skal holde ind i vinden, altså ${holdDir}. Et hold ${holdDir} betyder, at målet placeres ${ptSide} for midterstregen i retiklen.</p>`});
-    else if(ci.f<0.95&&fits(full))out.push({code:'full',html:`<p><b>Du regnede med fuld værdi.</b> Vind fra kl. ${sc.clock} er ${ci.name}, så kun ${fmt(ci.f*100,0)} % af de ${sc.ws} m/s virker på tværs. Du holdt ${fmt(Math.abs(a.w),1)} — det svarer til ${sc.ws} m/s fuld værdi.</p>`});
-    else if(ci.f>0.8&&fits(half))out.push({code:'half',html:`<p><b>Du regnede med halv værdi.</b> Kl. ${sc.clock} er ${ci.name}. Halv værdi gælder kun ved kl. 1, 5, 7 og 11.</p>`});
-    else{const pct=(a.w-drift)/windOnly*100,more=Math.abs(a.w)>Math.abs(sc.corW);
-      out.push({code:more?'over':'under',html:`<p><b>Du holdt ${more?'for meget':'for lidt'} vind</b> — ${fmt(Math.abs(a.w),1)} i stedet for ${fmt(Math.abs(sc.corW),1)} mil (${fmt(pct,0)} % af vindens andel). Det giver ${fmt(Math.abs(r.errW)*sc.dist/10,0)} cm ${r.errW>0?'til højre':'til venstre'}. ${more?'Brug 1 m/s-værdien for afstanden ('+fmt(sc.w1,2)+' mil) i stedet for at skønne.':'Vinddriften vokser hurtigere end afstanden, fordi kuglen bliver langsommere og er længere tid i luften. Ved '+sc.dist+' m er 1 m/s '+fmt(sc.w1,2)+' mil.'}</p>`});}
-  }
-  return out;
-}
-function trExplain(){
-  const sc=TR.sc,r=TR.res,ci=clockInfo(sc.clock),side=ci.side,cross=sc.ws*ci.f,drift=sc.drift||0,windOnly=sc.corW-drift;
-  const tot=sc.corW,totDir=tot>0?'H':'V',ptSide=tot>0?'venstre':'højre',aim=tot>0?'højre':'venstre';
-  let right='';
-  if(sc.mode==='both')right+=`<p><b>Elevation ${fmt(sc.corE,1)} mil.</b> Med nul på ${active()?active().zeroRange:100} m falder kuglen ${fmt(sc.corE,1)} mil under sigtelinjen på ${sc.dist} m. Du holder over ved at sætte målet på punktet ${fmt(sc.corE,1)} mil under centrum i juletræet.</p>`;
-  const driftTxt=Math.abs(drift)>=0.03?` Dertil kommer en fast højredrift fra spin drift og jordrotation på ${fmt(Math.abs(drift),2)} mil, som altid holdes mod venstre.`:'';
-  if(!side)right+=`<p><b>Vind ${Math.abs(tot)>=0.05?lr(tot,2):'0'}.</b> Vind fra kl. ${sc.clock} er ${sc.clock===12?'modvind':'medvind'} og giver ingen sidedrift.${driftTxt}${Math.abs(tot)>=0.05?` Hold derfor ${fmt(Math.abs(tot),1)} ${totDir}.`:''}</p>`;
-  else{const prod=cross*sc.w1;
-    right+=`<p><b>Vind ${lr(tot,2)}.</b> ${sc.ws} m/s fra kl. ${sc.clock} er ${ci.name}: ${sc.ws} × ${fmt(ci.f*100,0)} % = ${fmt(cross,1)} m/s sidevind. På ${sc.dist} m flytter 1 m/s sidevind kuglen ${fmt(sc.w1,3)} mil, så ${fmt(cross,1)} × ${fmt(sc.w1,3)} = ${fmt(prod,2)} mil ${side==='højre'?'H':'V'} (løseren: ${fmt(Math.abs(windOnly),2)}).${driftTxt} I alt ${fmt(Math.abs(tot),1)} ${totDir}: målet står ${fmt(Math.abs(tot),1)} mil til ${ptSide} for midterstregen, så riflen peger mod ${aim}.</p>`;}
-  if(r.hit)return `<div class="trexp"><div class="lbl">Sådan regnes det</div>${right}</div>`;
-  const d=trDiag();
-  return `<div class="trexp"><div class="lbl" style="color:var(--bad)">Hvad gik galt</div>${d.length?d.map(x=>x.html).join(''):'<p>Begge akser var inden for tolerancen, men tiden løb ud.</p>'}<div class="lbl" style="margin-top:12px">Det rigtige svar</div>${right}</div>`;
-}
-async function trLoad(){TR.log=(await dbAll('traininglog')).filter(r=>r.type==='hold').sort((a,b)=>a.ts-b.ts);}
-function trStatsHtml(){
-  const L=TR.log.filter(r=>!r.hint);
-  if(!L.length)return '<p>Ingen forsøg endnu. Statistikken bygges op, efterhånden som du træner.</p>';
-  const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
-  const last=L.slice(-20),hitR=mean(last.map(r=>r.hit?1:0));
-  const both=L.filter(r=>r.mode==='both');
-  const wv=L.filter(r=>Math.abs(r.corW-(r.drift||0))>=0.3);
-  const rat=wv.slice(-30).map(r=>(r.ansW-(r.drift||0))/(r.corW-(r.drift||0)));
-  const ratio=mean(rat),rsd=sd(rat);
-  const wrong=wv.filter(r=>Math.sign(r.ansW)!==Math.sign(r.corW)).length;
-  const cnt={};L.slice(-30).forEach(r=>(r.diag||[]).forEach(c=>{cnt[c]=(cnt[c]||0)+1;}));
-  const types=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
-  const bias=mean(L.slice(-30).map(r=>r.errW));
-  const bands=[[100,299],[300,499],[500,699],[700,900]].map(([lo,hi])=>{const b=L.filter(r=>r.dist>=lo&&r.dist<=hi);return {lo,hi,n:b.length,hit:mean(b.map(r=>r.hit?1:0)),eE:mean(b.filter(r=>r.mode==='both').map(r=>Math.abs(r.errE))),eW:mean(b.map(r=>Math.abs(r.errW)))};}).filter(b=>b.n);
-  const pct=v=>Number.isFinite(v)?fmt(v*100,0)+' %':'–';
-  let txt='';
-  if(types.length)txt+=`<div class="lbl" style="margin-top:10px">Fejltyper, seneste ${Math.min(30,L.length)} forsøg</div><table class="spec">${types.map(([c,n])=>`<tr><td>${DIAG_LBL[c]||c}</td><td>${n}</td></tr>`).join('')}</table>`;
-  if(Number.isFinite(ratio)&&wv.length>=5&&Number.isFinite(rsd)&&rsd>0.3){
-    txt+=`<div class="meta">Dit vindhold svinger meget — fra ${pct(Math.min(...rat))} til ${pct(Math.max(...rat))} af det rigtige. Se fejltyperne ovenfor i stedet for gennemsnittet.</div>`;
-  }else if(Number.isFinite(ratio)&&wv.length>=5){
-    txt+=`<div class="meta">Du holder i snit <b>${pct(ratio)}</b> af den korrekte vind (100 % er rigtigt${ratio<0.9?' — du underholder vinden':ratio>1.1?' — du overholder vinden':''}).</div>`;
-  }
-  if(wrong)txt+=`<div class="meta" style="color:var(--bad)">${wrong} gang${wrong>1?'e':''} holdt til forkert side.</div>`;
-  if(Number.isFinite(bias)&&Math.abs(bias)>=0.1&&L.length>=5)txt+=`<div class="meta">Systematisk vindfejl: ${fmt(Math.abs(bias),2)} mil for meget ${bias>0?'H':'V'} (træf til ${bias>0?'højre':'venstre'}).</div>`;
-  return `<div class="res flat">
-    <div class="line"><span class="k">Forsøg</span><span class="v">${L.length}</span></div>
-    <div class="line"><span class="k">Ramt, seneste ${last.length}</span><span class="v">${pct(hitR)}</span></div>
-    ${both.length?`<div class="line"><span class="k">Ø fejl elevation</span><span class="v">${fmt(mean(both.map(r=>Math.abs(r.errE))),2)} <small>mil</small></span></div>`:''}
-    <div class="line"><span class="k">Ø fejl vind</span><span class="v">${fmt(mean(L.map(r=>Math.abs(r.errW))),2)} <small>mil</small></span></div>
-  </div>${txt}
-  <div class="tblwrap" style="margin-top:10px"><table class="dope"><thead><tr><th>Afstand</th><th>Forsøg</th><th>Ramt</th><th>Ø elev</th><th>Ø vind</th></tr></thead><tbody>
-  ${bands.map(b=>`<tr><td>${b.lo}–${b.hi}</td><td>${b.n}</td><td>${pct(b.hit)}</td><td>${Number.isFinite(b.eE)?fmt(b.eE,2):'–'}</td><td>${fmt(b.eW,2)}</td></tr>`).join('')}
-  </tbody></table></div>
-  <button class="btn danger wide" id="trReset" style="margin-top:12px">Nulstil statistik</button>`;
-}
-function segHtml(id,cur,opts){return `<div class="seg" id="${id}">${opts.map(([v,l])=>`<button class="btn${String(v)===String(cur)?' on':''}" data-v="${v}">${l}</button>`).join('')}</div>`;}
-function renderTrain(){
-  const box=$('#trainBox');if(!box)return;
-  const p=active();
-  if(!p){box.innerHTML='<div class="card"><div class="alarm">Skriv din ammunition ind, før du træner hold.</div><button class="btn pri wide" id="trAmmo">Skriv ammunition</button></div>';$('#trAmmo').onclick=openNewAmmo;return;}
-  if(!TR.sc){trNew();return;}
-  const sc=TR.sc,st=trSet(),r=TR.res;
-  const head=`<div class="card trsc">
-    <div class="trrow"><div><div class="qk">Afstand</div><div class="trbig">${sc.dist} m</div>
-      <div class="qk" style="margin-top:8px">Vind</div><div class="trbig">${sc.ws} m/s <small>fra kl. ${sc.clock}</small></div></div>${clockSVG(sc.clock)}</div>
-    <div class="meta">${sc.mode==='both'?'Hold elevation og vind i retiklen.':'Elevation er drejet — hold kun vind.'} Tryk i retiklen, hvor målet skal stå. ${esc(sc.ammo)} · ${fmt(S.session.T,0)} °C · ${fmt(S.session.P,0)} hPa</div>
-    ${sc.limit>0&&!TR.done?`<div class="trtimer">Tid tilbage <span id="trClock">${fmt(sc.limit,1)} s</span></div>`:''}
-  </div>`;
-  let res='';
-  if(TR.done){
-    const late=r.late?' (tiden løb ud)':'';
-    res=`<div class="card trres ${r.hit?'hit':'miss'}"><div class="trverd">${r.hit?'✓ Ramt':'✗ Forbi'+late}</div>
-      <table class="trtab"><thead><tr><th></th>${sc.mode==='both'?'<th>Elevation</th>':''}<th>Vind</th></tr></thead><tbody>
-        <tr><td>Korrekt</td>${sc.mode==='both'?`<td>${fmt(sc.corE,1)}</td>`:''}<td>${lr(sc.corW)}</td></tr>
-        <tr><td>Dit hold</td>${sc.mode==='both'?`<td>${fmt(TR.ans.e,1)}</td>`:''}<td>${lr(TR.ans.w)}</td></tr>
-        <tr class="erow"><td>Fejl</td>${sc.mode==='both'?`<td>${fmt(r.errE,1)}</td>`:''}<td>${fmt(r.errW,1)}</td></tr>
-      </tbody></table>
-      <div class="meta">Mil · tolerance ${fmt(sc.tol,1)} mil · ${fmt(r.t,1)} s · <b>${impactTxt(r.errE,r.errW,sc.dist,sc.mode)}</b>. Gul cirkel i retiklen er det korrekte hold, krydset er dit.</div>
-      ${trExplain()}
-      ${TR.hint?'<div class="meta">Hjælp brugt — tæller ikke i statistikken.</div>':''}
-      <button class="btn pri wide" id="trNext" style="margin-top:10px;min-height:64px">Næste scenarie</button></div>`;
-  }
-  const ctl=TR.done?'':`<div class="card">
-    <div class="trans">Dit hold: <b id="trAns">${trAnsTxt()}</b></div>
-    <div class="adj">${sc.mode==='both'?'<button class="btn" data-adj="up">▲</button>':''}<button class="btn" data-adj="left">◀</button><button class="btn" data-adj="right">▶</button>${sc.mode==='both'?'<button class="btn" data-adj="down">▼</button>':''}</div>
-    <div class="hint" style="margin:-4px 0 10px">Pilene flytter holdet 0,1 mil.</div>
-    <div class="row"><button class="btn" id="trHint">${TR.hint?'1 m/s = '+fmt(sc.w1,2)+' mil':'Hjælp'}</button><button class="btn" id="trSkip">Spring over</button></div>
-    <button class="btn pri wide" id="trGo" style="min-height:64px">Afgiv hold</button></div>`;
-  box.innerHTML=head+(TR.done?res:'')+`<div id="trSvgBox">${trReticle()}</div>`+ctl+`
-    <div class="card"><h2>Statistik</h2>${trStatsHtml()}</div>
-    <div class="card"><h2>Indstillinger</h2>
-      <div class="lbl">Øvelse</div>${segHtml('trMode',st.mode,[['both','Elevation + vind'],['wind','Kun vind']])}
-      <div class="lbl">Maks. afstand</div>${segHtml('trDist',st.maxDist,[[300,'300'],[500,'500'],[700,'700'],[900,'900']])}
-      <div class="lbl">Maks. vind (m/s)</div>${segHtml('trWind',st.maxWind,[[4,'4'],[6,'6'],[8,'8'],[10,'10']])}
-      <div class="lbl">Tolerance (mil)</div>${segHtml('trTol',st.tol,[[0.1,'0,1'],[0.2,'0,2'],[0.3,'0,3']])}
-      <div class="lbl">Tidsgrænse</div>${segHtml('trLim',st.limit,[[0,'Fra'],[10,'10 s'],[20,'20 s'],[30,'30 s']])}
-      <div class="hint">Scenarierne regnes med den valgte ammunition og atmosfæren under Løsning.</div></div>`;
-  bindTrSvg();
-  if(TR.done){const rc=$('#trainBox .trres');if(rc)rc.scrollIntoView({block:'start'});window.scrollBy(0,-90);}
-  const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn;};
-  on('#trGo',()=>trSubmit(false));on('#trNext',trNew);on('#trSkip',trNew);
-  on('#trHint',()=>{TR.hint=true;$('#trHint').textContent='1 m/s = '+fmt(sc.w1,2)+' mil';});
-  $$('#trainBox [data-adj]').forEach(b=>b.onclick=()=>{const d=b.dataset.adj,a=TR.ans;
-    if(d==='up')trSetAns(a.e-0.1,a.w);if(d==='down')trSetAns(a.e+0.1,a.w);if(d==='left')trSetAns(a.e,a.w+0.1);if(d==='right')trSetAns(a.e,a.w-0.1);});
-  [['#trMode','mode',v=>v],['#trDist','maxDist',Number],['#trWind','maxWind',Number],['#trTol','tol',Number],['#trLim','limit',Number]].forEach(([id,k,cv])=>{
-    $$(id+' button').forEach(b=>b.onclick=()=>trSave(k,cv(b.dataset.v)));});
-  on('#trReset',async()=>{if(!confirm('Slet al statistik for holdtræning?'))return;
-    for(const r of TR.log)await dbDel('traininglog',r.id);TR.log=[];renderTrain();toast('Statistik nulstillet');});
-}
-function showTrain(){trLoad().then(()=>{TR.sc=null;renderTrain();window.scrollTo(0,0);});}
-
 /* ---------- Skudlog: kald mod træf, kolde skud og truing af V₀ ---------- */
 const LG={mark:'call',call:null,hit:null,cold:false,shots:[]};
 async function lgLoad(){LG.shots=(await dbAll('shotlog')).filter(r=>r.type==='shot').sort((a,b)=>a.ts-b.ts);}
@@ -1914,7 +1890,7 @@ function lgAnalysis(p){
 function renderLog(keep){
   const box=$('#logBox');if(!box)return;
   const p=active();
-  if(!p||!S.last){box.innerHTML='<div class="card"><div class="alarm">Vælg ammunition og få en gyldig løsning under Løsning først.</div></div>';return;}
+  if(!p||!S.last){box.innerHTML='<div class="card"><div class="alarm">Vælg ammunition og få en gyldig løsning under Input først.</div></div>';return;}
   const {sol,ctx}=S.last,R=S.session.dist,z=S.last.zones;
   if(!keep){LG.elev=Math.round(sol.elevDial*10)/10;LG.wind=Math.round((sol.fMin+sol.fMax)/2*10)/10;}
   const windTxt=z.length===1?`${fmt(z[0].min,1)}–${fmt(z[0].max,1)} m/s kl. ${fmt(z[0].clock,1)}${S.session.dirU?' ±'+fmt(S.session.dirU,1):''}`:'3 zoner';
@@ -2051,7 +2027,7 @@ async function wxFetch(toSolve){
 function wxApplyAtmos(quiet){
   const w=S.session.wx;if(!w)return;
   S.session.T=Math.round(w.cur.T);S.session.P=Math.round(w.cur.P);saveSession();renderSolveForm();compute();
-  toast(`${S.session.T} °C og ${S.session.P} hPa sat i løsningen`+(w.src!=='gps'?' (ikke GPS — '+(w.src==='stade'?'kortets stade':'startposition')+')':''));
+  toast(`${S.session.T} °C og ${S.session.P} hPa sat i Input`+(w.src!=='gps'?' (ikke GPS — '+(w.src==='stade'?'kortets stade':'startposition')+')':''));
 }
 function wxWindCall(){
   const w=S.session.wx;if(!w)return null;const sh=sessShot();
@@ -2079,7 +2055,7 @@ function renderWx(){
       <div class="meta">${w.src==='gps'?'GPS-position':w.src==='stade'?'Kortets stade (GPS ikke tilgængelig)':'Kortets startposition (GPS ikke tilgængelig)'} ${fmt(w.lat,3)}° N · ${fmt(w.lon,3)}° Ø${Number.isFinite(w.elev)?' · '+fmt(w.elev,0)+' m o.h.':''} · modeltid ${hhmm(c.time)} · hentet ${wxAgeTxt(w)}<br>
       Sol op ${hhmm(w.sun.rise)} · ned ${hhmm(w.sun.set)}</div>
     </div>
-    <div class="row"><button class="btn pri" id="wxAtm">Atmosfære til løsning</button>
+    <div class="row"><button class="btn pri" id="wxAtm">Atmosfære til Input</button>
       <button class="btn" id="wxWind" ${k.clock==null?'disabled':''}>Vind som kald</button></div>
     ${k.clock==null?'<div class="hint" style="margin:-6px 0 12px">Vind som klokretning kræver stade og mål på kortet.</div>':''}
     ${w.hours.length?`<div class="card"><h2>De næste timer</h2><table class="trtab wxt"><tr><th>kl.</th><th>°C</th><th>m/s</th><th>stød</th><th>fra</th></tr>
@@ -2210,13 +2186,11 @@ async function exportBackup(){
   for(const k of BK_STORES)data.stores[k]=await dbAll(k);
   const P=data.stores.profiles,shots=data.stores.shotlog.filter(r=>r.type==='shot').sort((a,b)=>a.ts-b.ts),tr=data.stores.traininglog.filter(r=>r.type==='hold').sort((a,b)=>a.ts-b.ts);
   const sheets=[];
-  sheets.push({name:'Oversigt',widths:[28,40],rows:[['The Shootingverse — backup',''],['Dato',dtx(data.ts)],['App-version',APP_VERSION],['Ammunition',P.length],['Skud i skudlog',shots.length],['Forsøg i holdtræning',tr.length],['',''],['Gendan','Åbn appen → Backup → Gendan fra fil, og vælg denne fil.'],['Bemærk','Fanen _backup indeholder alle data og må ikke ændres.']]});
+  sheets.push({name:'Oversigt',widths:[28,40],rows:[['The Shootingverse — backup',''],['Dato',dtx(data.ts)],['App-version',APP_VERSION],['Ammunition',P.length],['Skud i skudlog',shots.length],['',''],['Gendan','Åbn appen → Backup → Gendan fra fil, og vælg denne fil.'],['Bemærk','Fanen _backup indeholder alle data og må ikke ændres.']]});
   sheets.push({name:'Ammunition',widths:[30,12,10,10,10,12,10,10,12,12,12],rows:[['Ammunition','Lot','Vægt (grain)','G7-BK','V₀ (m/s)','V₀ målt ved °C','Nul (m)','Sigtehøjde (cm)','Klikfaktor','Æske V₀','Verificeret'],
     ...P.map(p=>[p.name,p.lot||'',p.weight,p.bc,p.mv,p.mvT??'',p.zeroRange,p.sightH,p.clickFactor,p.boxMv??'',p.verified?'ja':'nej'])]});
   sheets.push({name:'Skudlog',widths:[17,26,10,9,7,8,20,10,10,10,10,10,10,8,7,30],rows:[['Dato','Ammunition','Lot','Afstand (m)','°C','hPa','Vindkald','Elev drejet','Vind holdt','Kald op','Kald side','Træf op','Træf side','Koldt','Lyddæmper','Note'],
     ...shots.map(r=>{const z=r.zones&&r.zones[0];return [dtx(r.ts),r.ammo,r.lot||'',r.dist,r.T,r.P,z?(r.zones.length>1?'3 zoner':`${z.min}–${z.max} m/s kl. ${z.clock}${r.dirU?' ±'+r.dirU:''}`):'',r2(r.elevSet),sideTxt(r.windSet),r2(r.call.y),sideTxt(r.call.x),r2(r.hit.y),sideTxt(r.hit.x),r.cold?'ja':'',r.supp?'ja':'',r.note||''];})]});
-  sheets.push({name:'Holdtræning',widths:[17,9,8,6,12,10,10,10,10,8,7,30],rows:[['Dato','Afstand (m)','Vind m/s','Kl.','Øvelse','Korrekt elev','Korrekt vind','Dit elev','Dit vind','Ramt','Tid (s)','Fejltyper'],
-    ...tr.map(r=>[dtx(r.ts),r.dist,r.ws,r.clock,r.mode==='both'?'elev + vind':'kun vind',r2(r.corE),sideTxt(r.corW),r2(r.ansE),sideTxt(r.ansW),r.hit?'ja':'nej',r.t,(r.diag||[]).map(c=>DIAG_LBL[c]||c).join(', ')+(r.hint?' (hjælp)':'')])]});
   if(S.last){const {ctx}=S.last,rows=dopeRows([100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900]);
     sheets.push({name:'Skydetabel',widths:[10,10,10,14,8],rows:[['Afstand (m)','Elev (mil)','1 m/s (mil)','Gaffel (mil)','Mach'],...rows.map(r=>r.out?[r.x,'uden for rækkevidde']:[r.x,r2(r.elevDial),r2(Math.abs(r.wind1)),forkTxt(r.fMin,r.fMax),r2(r.mach)]),[],[`${ctx.pr.name}${ctx.pr.lot?' · lot '+ctx.pr.lot:''} · V₀ ${fmt(ctx.mv,0)} · ${fmt(ctx.cond.T,0)} °C · ${fmt(ctx.cond.P,0)} hPa`]]});}
   const json=JSON.stringify(data),chunks=[];for(let i=0;i<json.length;i+=30000)chunks.push([json.slice(i,i+30000)]);
@@ -2280,11 +2254,10 @@ async function renderBackup(){
     <div class="line"><span class="k">Sidste backup</span><span class="v" style="font-size:22px">${S.settings.lastBackup?dtx(S.settings.lastBackup):'aldrig'}</span></div>
     <div class="line"><span class="k">Nye poster siden</span><span class="v" style="font-size:22px">${s.days==null?s.shots+s.tr:s.newer}</span></div>
     <div class="line"><span class="k">Ammunition</span><span class="v" style="font-size:22px">${S.profiles.length}</span></div>
-    <div class="line"><span class="k">Skud i skudlog</span><span class="v" style="font-size:22px">${s.shots}</span></div>
-    <div class="line"><span class="k">Holdtræning</span><span class="v" style="font-size:22px">${s.tr}</span></div></div>
+    <div class="line"><span class="k">Skud i skudlog</span><span class="v" style="font-size:22px">${s.shots}</span></div></div>
     ${(s.days==null&&s.shots+s.tr)||(s.newer&&s.days>=14)?'<div class="alarm">Tag en backup — dine data ligger kun i telefonens browserlager, som iOS kan rydde ved pladsmangel.</div>':''}</div>
   <div class="card"><h2>Gem backup</h2>
-    <p>Gemmer alt — ammunition, skudlog, holdtræning og indstillinger — i én Excel-fil. Filen kan åbnes i Excel eller Numbers med faner for ammunition, skudlog, holdtræning og skydetabel, og den kan bruges til at gendanne appen.</p>
+    <p>Gemmer alt — ammunition, skudlog og indstillinger — i én Excel-fil. Filen kan åbnes i Excel eller Numbers med faner for ammunition, skudlog og skydetabel, og den kan bruges til at gendanne appen.</p>
     <button class="btn pri wide" id="bkSave" style="margin-top:12px;min-height:64px">Gem backup som Excel-fil</button>
     <div class="hint">På iPhone åbner Del-menuen: vælg <b>Gem i Arkiver</b> (Filer), iCloud Drive eller send den til dig selv.</div></div>
   <div class="card"><h2>Gendan</h2>
@@ -2419,7 +2392,7 @@ function renderMapRead(){
       ${wind}
     </div>
     ${nf('m_wf','map','Vind fra (kompas)','°',{min:0,max:359,step:10,dec:0,opt:true},wf)}
-    <div class="row"><button class="btn pri" id="toSolve" ${sh?'':'disabled'}>Til løsning</button><button class="btn" id="mapClear">Ryd</button></div>
+    <div class="row"><button class="btn pri" id="toSolve" ${sh?'':'disabled'}>Til Input</button><button class="btn" id="mapClear">Ryd</button></div>
 `;
   $$('#mapNext button').forEach(b=>b.onclick=()=>{MAP.next=b.dataset.n;renderMapRead();});
   $('#findMe').onclick=findMe;
@@ -2430,7 +2403,7 @@ function onMapInput(){const r=readField($('#m_wf'));if(!r.ok)return;S.session.wi
 function sendToSolve(sh,wf){
   if(!sh)return;
   S.session.dist=Math.round(sh.d);
-  let msg='Afstand '+S.session.dist+' m sendt til løsning';
+  let msg='Afstand '+S.session.dist+' m sendt til Input';
   if(wf!=null){const k=vindKlok(wf,sh.b);S.session.zones.forEach(z=>z.clock=k);msg+=', vind kl. '+fmt(k,k%1?1:0);}
   saveSession();renderSolveForm();compute();
   go('v-solve');toast(msg);
