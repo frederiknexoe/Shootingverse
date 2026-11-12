@@ -738,6 +738,17 @@ select{background-image:linear-gradient(45deg,transparent 50%,var(--acc) 50%),li
 .seg button{flex:1;border:0;border-right:1px solid var(--line-hi);color:var(--muted)}
 .seg button:last-child{border-right:0}
 .seg button.on{background:var(--acc-dim);color:var(--acc);box-shadow:inset 0 -3px 0 var(--acc)}
+.clk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:0 0 12px}
+.clk .btn{min-height:52px;padding:0;font-size:19px;letter-spacing:0}
+.clk .btn.on{background:var(--acc-dim);color:var(--acc);border-color:var(--acc);box-shadow:inset 0 -3px 0 var(--acc)}
+.zone{border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.zspan{font-weight:400;letter-spacing:1px;color:var(--muted);margin-left:6px}
+details.adv{margin:0 0 12px}details.adv summary{cursor:pointer;color:var(--muted);font:700 12px/1 var(--head);letter-spacing:2px;text-transform:uppercase;padding:10px 0}
+.wres{border-top:1.5px solid var(--line-hi);margin-top:10px;padding-top:8px}
+.zbar{display:flex;height:16px;margin:10px 0 6px;border:1px solid var(--line-hi)}
+.zbar span{min-width:2px}.zb0{background:var(--acc)}.zb1{background:var(--warn)}.zb2{background:var(--user)}
+.zleg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.zleg i{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
 .chk{width:100%;text-align:left;margin-bottom:8px;color:var(--muted);border-color:var(--line-hi)}
 .chk.on{background:var(--acc-dim);color:var(--acc);border-color:var(--acc)}
 #menuBtn{font-size:28px}
@@ -1121,7 +1132,9 @@ function windFn(zones,R,key,incl){
   const comps=zones.map(z=>{const s=z[key],a=z.clock*Math.PI/6,h=-s*Math.cos(a),c=-s*Math.sin(a);return [h*Math.cos(incl),-h*Math.sin(incl),c];});
   const n=comps.length;
   if(n===1){const w=comps[0];return ()=>w;}
-  return x=>{let i=Math.floor(x/R*n);if(i<0)i=0;if(i>=n)i=n-1;return comps[i];};
+  // Zonegrænser som brøkdel af afstanden (f1 = zonens slutning); uden f1 deles i lige store stykker.
+  const ends=zones.map((z,i)=>z.f1!=null?z.f1:(i+1)/n);
+  return x=>{const q=x/R;for(let i=0;i<n-1;i++)if(q<ends[i])return comps[i];return comps[n-1];};
 }
 function fly(o){
   const c=o.atm.c,k0=o.atm.rho*Math.PI/(8*o.bc*BC_SI),incl=o.incl||0;
@@ -1185,7 +1198,7 @@ function zoneFork(ctx,R,zones){
   let lo=0,hi=0;
   zones.forEach((z,i)=>{
     let mn=Infinity,mx=-Infinity;
-    zoneCands(z).forEach(k=>{const zz=zones.map((q,j)=>j===i?{min:k.sp,max:k.sp,clock:k.c}:{min:0,max:0,clock:q.clock});
+    zoneCands(z).forEach(k=>{const zz=zones.map((q,j)=>j===i?Object.assign({},q,{min:k.sp,max:k.sp,clock:k.c}):Object.assign({},q,{min:0,max:0}));
       const r=runCtx(ctx,[R],windFn(zz,R,'min',ctx.incl))[0];if(!r)return;const v=corrMil(r.z,R);if(v<mn)mn=v;if(v>mx)mx=v;});
     lo+=mn;hi+=mx;
   });
@@ -1204,8 +1217,16 @@ function solvePoint(ctx,R,zones){
   const b=runCtx(ctx,[R],NOWIND)[0];if(!b)return null;
   const w1=runCtx(ctx,[R],windFn(W1,R,'min',ctx.incl))[0];
   const row=makeRow(ctx,b,w1,zoneFork(ctx,R,zones));
-  row.zoneSens=zones.length>1?zones.map((z,i)=>{const zz=zones.map((q,j)=>({min:j===i?1:0,max:j===i?1:0,clock:3}));return corrMil(runCtx(ctx,[R],windFn(zz,R,'min',ctx.incl))[0].z,R);}):[row.wind1];
+  row.zoneSens=zones.length>1?zones.map((z,i)=>{const zz=zones.map((q,j)=>Object.assign({},q,{min:j===i?1:0,max:j===i?1:0,clock:3}));return corrMil(runCtx(ctx,[R],windFn(zz,R,'min',ctx.incl))[0].z,R);}):[row.wind1];
   return row;
+}
+// Ren vind (uden fast højredrift): én kørsel med vinden som stykkevis funktion af afstanden, plus hver zones bidrag for sig.
+// key 'min' = vindstyrke, 'max' = vindstød. Sidevind = W·sin(kl·30°); for-/modvind påvirker ikke sidedriften.
+function windSolve(ctx,R,zones,key){
+  const run=zz=>{const r=runCtx(ctx,[R],windFn(zz,R,key,ctx.incl))[0];return r?corrMil(r.z,R):0;};
+  const tot=run(zones);
+  const parts=zones.length>1?zones.map((z,i)=>run(zones.map((q,j)=>j===i?q:Object.assign({},q,{min:0,max:0})))):[tot];
+  return {tot,parts};
 }
 function dopeTable(ctx,ranges,zones){
   const base=runCtx(ctx,ranges,NOWIND);
@@ -1224,7 +1245,7 @@ function parseNum(str){
 }
 /*ENGINE-END*/
 
-const APP_VERSION='3.9.0';
+const APP_VERSION='4.0.0';
 const DB_NAME='ballistik308',DB_VERSION=1,SCHEMA=1;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function fmt(v,d=1){if(v==null||!Number.isFinite(v))return '–';let s=v.toFixed(d);if(/^-0(\.0*)?$/.test(s))s=s.slice(1);return s.replace('.',',');}
@@ -1233,6 +1254,7 @@ function fmtR(v){return fmt(v,Number.isInteger(v)?0:1);}
 function lr(v,d=1){if(!Number.isFinite(v))return '–';const a=Math.abs(v);if(a<Math.pow(10,-d)/2)return fmt(0,d);return fmt(a,d)+(v>0?' H':' V');}
 function ud(v,d=1){if(!Number.isFinite(v))return '–';const a=Math.abs(v);if(a<Math.pow(10,-d)/2)return fmt(0,d);return fmt(a,d)+(v>0?' op':' ned');}
 function clicks(dialMil){return Math.round(dialMil/0.1);}
+function windDesc(z){return `${fmt(z.min,1)}${z.gust!=null?' (stød '+fmt(z.gust,1)+')':''} m/s kl. ${fmt(z.clock,z.clock%1?1:0)}`;}
 function forkTxt(a,b){const lo=Math.min(a,b),hi=Math.max(a,b);if(Math.abs(hi)<0.05&&Math.abs(lo)<0.05)return '0,0';
   if(lo>=-0.049){return `${fmt(Math.max(0,lo),1)}–${fmt(hi,1)} H`;}if(hi<=0.049){return `${fmt(Math.max(0,-hi),1)}–${fmt(-lo,1)} V`;}return `${lr(lo)} – ${lr(hi)}`;}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -1320,7 +1342,7 @@ const PFIELDS=[
 /* ---------- Tilstand ---------- */
 const S={
   profiles:[],activeId:null,last:null,quickOn:false,wake:null,swReg:null,
-  session:{dist:300,T:15,P:1013,supp:false,windMode:'single',zones:[{min:2,max:4,clock:3},{min:2,max:4,clock:3},{min:2,max:4,clock:3}]},
+  session:{dist:300,T:15,P:1013,supp:false,windMode:'single',windModeSet:false,zoneN:3,zoneNSet:false,zb:null,zones:[{min:3,max:3,gust:null,clock:3},{min:3,max:3,gust:null,clock:3},{min:3,max:3,gust:null,clock:3}]},
   settings:{theme:'day',lat:55.43,lon:11.57,holdMode:'dial'}
 };
 const active=()=>S.profiles.find(p=>p.id===S.activeId)||S.profiles[0];
@@ -1378,6 +1400,7 @@ document.addEventListener('input',e=>{
   readField(el);
   const f=el.dataset.form;
   if(f==='sess')onSessionInput();
+  else if(f==='zb')onBoundInput();
   else if(f==='set')onSettingsInput();
   else if(f==='map')onMapInput();
   else if(f==='log')lgKeep();
@@ -1418,28 +1441,77 @@ $('#menuClose').onclick=closeMenu;
 $('#menu').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go);});
 
 /* ---------- Skyd: løser ---------- */
-function zoneNames(n){return n===1?['Vind']:['Nær (0–⅓)','Midt (⅓–⅔)','Fjern (⅔–1)'];}
+function zoneNames(n){return n===1?['Vind']:n===2?['Nær','Fjern']:['Nær','Midt','Fjern'];}
+// Ældre sessioner: min–maks bliver vind + vindstød; tilvalg af tilstand og zoneantal er automatiske, til brugeren selv vælger.
+function sessNorm(s){
+  if(!Array.isArray(s.zones))s.zones=[];
+  for(let i=0;i<3;i++){const z=s.zones[i]||s.zones[0]||{min:3,max:3,clock:3};
+    if(!('gust' in z))z.gust=Number.isFinite(z.max)&&z.max>z.min?z.max:null;
+    if(!Number.isFinite(z.clock))z.clock=3;
+    z.max=z.gust!=null?Math.max(z.gust,z.min):z.min;s.zones[i]=z;}
+  if(s.windModeSet==null)s.windModeSet=false;if(s.zoneNSet==null)s.zoneNSet=false;
+  if(s.zoneN!==2&&s.zoneN!==3)s.zoneN=3;if(s.zb!=null&&!Array.isArray(s.zb))s.zb=null;
+  return s;
+}
+function effMode(s=S.session){return s.windModeSet?s.windMode:(s.dist>=300?'zones':'single');}
+function effN(s=S.session){return s.zoneNSet?s.zoneN:(s.dist<500?2:3);}
+function zoneIdx(n){return n===2?[0,2]:[0,1,2];}
+function autoBounds(R,n){return n===2?[Math.round(R/2)]:[Math.round(R/3),Math.round(R*2/3)];}
+function boundsOk(b,R,n){return Array.isArray(b)&&b.length===n-1&&b.every((v,i)=>Number.isFinite(v)&&v>0&&v<R&&(i===0||v>b[i-1]));}
+function curBounds(s=S.session){const n=effN(s);return boundsOk(s.zb,s.dist,n)?s.zb:autoBounds(s.dist,n);}
+function spanTxt(i,b,R){const a=i?b[i-1]:0,e=i<b.length?b[i]:R;return `${fmtR(a)}–${fmtR(e)} m`;}
+function clockPick(k,c){const cur=((Math.round(c)%12)+12)%12||12;
+  return `<div class="clk" data-z="${k}">${[1,2,3,4,5,6,7,8,9,10,11,12].map(h=>`<button type="button" class="btn${h===cur?' on':''}" data-c="${h}">${h}</button>`).join('')}</div>`;}
+function zoneBlock(k,label,span){
+  const z=S.session.zones[k];
+  return `<div class="zone"><div class="lbl">${label}${span!=null?` <span class="zspan" id="zspan${k}">${span}</span>`:''}${Number.isFinite(z.clock)&&z.clock%1?` <span class="zspan">kl. ${fmt(z.clock,1)}</span>`:''}</div>
+  <div class="grid2">${nf('z'+k+'sp','sess','Vind','m/s',{min:0,max:15,step:0.5,dec:1},z.min)}${nf('z'+k+'gu','sess','Vindstød','m/s',{min:0,max:20,step:0.5,dec:1,opt:true},z.gust)}</div>
+  <div class="lbl" style="margin-top:2px">Fra kl.</div>${clockPick(k,z.clock)}</div>`;
+}
+function windCardHtml(){
+  const s=S.session,mode=effMode(s),n=effN(s),R=s.dist;
+  let body='';
+  if(mode==='single')body=zoneBlock(0,'Vind',null);
+  else{
+    const b=curBounds(s),names=zoneNames(n);
+    body=`<div class="seg" id="zoneNSeg"><button class="btn${n===2?' on':''}" data-n="2">2 zoner</button><button class="btn${n===3?' on':''}" data-n="3">3 zoner</button></div>`+
+      zoneIdx(n).map((k,i)=>zoneBlock(k,names[i],spanTxt(i,b,R))).join('')+
+      `<button class="btn wide" id="zCopy" style="margin:4px 0 10px">Kopiér nær til alle</button>
+      <details class="adv"${boundsOk(s.zb,R,n)?' open':''}><summary>Avanceret · zonegrænser</summary>
+        <div class="grid2">${b.map((v,i)=>nf('zb'+i,'zb',`Grænse ${i+1}`,'m',{min:1,max:Math.max(2,R-1),step:10,dec:0},v)).join('')}</div>
+        <button class="btn wide" id="zbReset" style="margin-bottom:8px">Lige dele</button>
+        <div class="hint">Grænserne skal stige og ligge mellem 0 og ${fmtR(R)} m.</div></details>`;
+  }
+  return `<h2>Vind</h2>
+    <div class="seg" id="windSeg"><button class="btn${mode==='single'?' on':''}" data-m="single">Én vind</button><button class="btn${mode==='zones'?' on':''}" data-m="zones">Vindzoner</button></div>
+    ${body}
+    <div class="lbl">Sikkerhed på retningen</div>
+    <div class="seg" id="dirSeg">${[[0,'Præcis'],[0.5,'± ½ time'],[1,'± 1 time']].map(([v,l])=>`<button class="btn${(s.dirU||0)===v?' on':''}" data-u="${v}">${l}</button>`).join('')}</div>
+    <div class="hint">Kl. angiver hvorfra vinden kommer: 12 = modvind fra målet, 3 = fra højre, 9 = fra venstre, 6 = medvind. Vindstød giver en ekstra resultatlinje og udvider gaflen.</div>
+    <div id="windRes"></div>`;
+}
+function bindWindCard(){
+  const s=S.session;
+  $('#windSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;s.windMode=b.dataset.m;s.windModeSet=true;saveSession();renderSolveForm();compute();};
+  const zs=$('#zoneNSeg');if(zs)zs.onclick=e=>{const b=e.target.closest('button');if(!b)return;s.zoneN=+b.dataset.n;s.zoneNSet=true;s.zb=null;saveSession();renderSolveForm();compute();};
+  $$('#windCard .clk').forEach(g=>g.onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=+g.dataset.z;s.zones[k].clock=+b.dataset.c;
+    g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));saveSession();compute();});
+  const cp=$('#zCopy');if(cp)cp.onclick=()=>{if(!collectSession())return;const z=s.zones[0];[1,2].forEach(k=>s.zones[k]=Object.assign({},z));saveSession();renderSolveForm();compute();toast('Nær-zonen kopieret til alle zoner');};
+  const zr=$('#zbReset');if(zr)zr.onclick=()=>{s.zb=null;S.zbDirty=false;saveSession();renderSolveForm();compute();};
+  $$('#dirSeg button').forEach(b=>b.onclick=()=>{s.dirU=+b.dataset.u;saveSession();renderSolveForm();compute();});
+  $('#s_dist').addEventListener('change',()=>{if(S.formSig!==effMode()+effN())renderSolveForm();});
+}
+function onBoundInput(){S.zbDirty=true;onSessionInput();}
 function renderSolveForm(){
   const s=S.session,p=active();
   const opts=S.profiles.map(q=>`<option value="${q.id}"${p&&q.id===p.id?' selected':''}>${esc(q.name)}${q.lot?' · lot '+esc(q.lot):''}</option>`).join('')+`<option value="__new"${p?'':' selected'}>+ Skriv ny ammunition …</option>`;
-  const nz=s.windMode==='zones'?3:1,names=zoneNames(nz);
-  let zones='';
-  for(let i=0;i<nz;i++){
-    const z=s.zones[i];
-    zones+=`<div class="lbl">${names[i]}</div><div class="grid3">${nf('z'+i+'min','sess','Min','m/s',{min:0,max:30,step:0.5,dec:1},z.min)}${nf('z'+i+'max','sess','Maks','m/s',{min:0,max:30,step:0.5,dec:1},z.max)}${nf('z'+i+'clk','sess','Fra kl.','',{min:0,max:12,step:0.5,dec:1},z.clock)}</div>`;
-  }
+  sessNorm(s);S.formSig=effMode()+effN();S.zbDirty=false;
   $('#solveForm').innerHTML=`
   <div class="card"><h2>Ammunition og afstand</h2>
     <div class="field"><label for="selProfile">Ammunition</label><select id="selProfile">${opts}</select></div>
     ${nf('s_dist','sess','Afstand til mål','m',{min:50,max:1000,step:10,dec:0},s.dist)}
   </div>
-  <div class="card"><h2>Vind (manuelt kald)</h2>
-    <div class="seg" id="windSeg"><button class="btn${nz===1?' on':''}" data-m="single">Én vind</button><button class="btn${nz===3?' on':''}" data-m="zones">3 zoner</button></div>
-    ${zones}
-    <div class="lbl">Sikkerhed på retningen</div>
-    <div class="seg" id="dirSeg">${[[0,'Præcis'],[0.5,'± ½ time'],[1,'± 1 time']].map(([v,l])=>`<button class="btn${(s.dirU||0)===v?' on':''}" data-u="${v}">${l}</button>`).join('')}</div>
-    <div class="hint">Klokretning angiver hvorfra vinden kommer: 12 = modvind, 3 = fra højre, 9 = fra venstre. Retningssikkerheden udvider gaflen, så den også dækker et usikkert klokkeslæt.</div>
-  </div>
+  <div class="card" id="windCard">${windCardHtml()}</div>
   <div class="card"><h2>Atmosfære</h2>
     <div class="grid2">${nf('s_T','sess','Temperatur','°C',{min:-40,max:50,step:1,dec:0},s.T)}${nf('s_P','sess','Stationstryk','hPa',{min:600,max:1100,step:1,dec:0},s.P)}</div>
     <button class="btn wide" id="wxSolve" style="margin-bottom:6px" ${WX.busy?'disabled':''}>${WX.busy?'Henter vejr …':'Hent temperatur og tryk (GPS)'}</button>
@@ -1447,10 +1519,9 @@ function renderSolveForm(){
     <button class="btn chk${s.supp?' on':''}" id="suppTgl">${s.supp?'✓ Lyddæmper monteret':'Lyddæmper ikke monteret'}</button>
   </div>`;
   $('#selProfile').onchange=e=>{if(e.target.value==='__new'){openNewAmmo();return;}S.activeId=e.target.value;saveSettings();renderSolveForm();compute();};
-  $('#windSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.session.windMode=b.dataset.m;saveSession();renderSolveForm();compute();};
+  bindWindCard();
   $('#wxSolve').onclick=()=>wxFetch(true);
   $('#suppTgl').onclick=()=>{S.session.supp=!S.session.supp;saveSession();renderSolveForm();compute();};
-  $$('#dirSeg button').forEach(b=>b.onclick=()=>{S.session.dirU=+b.dataset.u;saveSession();renderSolveForm();compute();});
 }
 let compT;
 function onSessionInput(){
@@ -1458,19 +1529,26 @@ function onSessionInput(){
 }
 function collectSession(){
   const {ok,vals}=readForm('sess');
-  const s=S.session,nz=s.windMode==='zones'?3:1;
+  const s=S.session;
   let okz=ok;
-  for(let i=0;i<nz;i++){
-    const a=vals['z'+i+'min'],b=vals['z'+i+'max'];
-    if(a!=null&&b!=null&&a>b){okz=false;$('#z'+i+'min').classList.add('bad');$('#z'+i+'max').classList.add('bad');}
-  }
+  // Vindstød under vindstyrken giver ingen mening og markeres.
+  [0,1,2].forEach(k=>{const a=vals['z'+k+'sp'],g=vals['z'+k+'gu'];if(a!=null&&g!=null&&g<a){okz=false;$('#z'+k+'gu').classList.add('bad');}});
+  let zb=null;
+  if(S.zbDirty){const r=readForm('zb');const b=Object.keys(r.vals).sort().map(k=>r.vals[k]);
+    if(!r.ok||!boundsOk(b,vals.s_dist,b.length+1)){okz=false;$$('input[data-form="zb"]').forEach(el=>el.classList.add('bad'));}else zb=b;}
   if(!okz)return false;
+  const distChanged=s.dist!==vals.s_dist;
   s.dist=vals.s_dist;s.T=vals.s_T;s.P=vals.s_P;
-  for(let i=0;i<nz;i++)s.zones[i]={min:vals['z'+i+'min'],max:vals['z'+i+'max'],clock:vals['z'+i+'clk']};
+  [0,1,2].forEach(k=>{if(!(('z'+k+'sp') in vals))return;const z=s.zones[k];z.min=vals['z'+k+'sp'];z.gust=vals['z'+k+'gu'];z.max=z.gust!=null?z.gust:z.min;});
+  if(zb)s.zb=zb;
+  if(distChanged&&s.zb&&!boundsOk(s.zb,s.dist,effN())){s.zb=null;toast('Zonegrænser nulstillet til lige dele');}
   saveSession();
   return true;
 }
-function curZones(){const s=S.session,u=s.dirU||0;return (s.windMode==='zones'?s.zones.slice(0,3):[s.zones[0]]).map(z=>Object.assign({},z,{du:u}));}
+function curZones(){const s=S.session,u=s.dirU||0;
+  if(effMode(s)==='single'){const z=s.zones[0];return [Object.assign({},z,{max:z.gust!=null?z.gust:z.min,du:u})];}
+  const n=effN(s),b=curBounds(s),R=s.dist;
+  return zoneIdx(n).map((k,i)=>{const z=s.zones[k];return Object.assign({},z,{max:z.gust!=null?z.gust:z.min,du:u,f0:i?b[i-1]/R:0,f1:i<n-1?b[i]/R:1,name:zoneNames(n)[i]});});}
 // Fugt (50 %) og terrænvinkel (0°) holdes faste: begge flytter under 0,5 mil på 900 m på dette terræn.
 function curCond(){const s=S.session;return {T:s.T,P:s.P,RH:50,incl:0,supp:s.supp,lat:S.settings.lat};}
 function validNums(o){return Object.values(o).every(v=>typeof v!=='number'||Number.isFinite(v));}
@@ -1487,10 +1565,31 @@ function compute(){
     if(!Number.isFinite(ctx.bore))throw new Error('Nulstilling kunne ikke løses');
     const sol=solvePoint(ctx,S.session.dist,zones);
     if(!sol)throw new Error('Projektilet når ikke '+S.session.dist+' m med disse data');
-    S.last={ctx,sol,zones};
+    S.last={ctx,sol,zones,wr:windSolve(ctx,S.session.dist,zones,'min'),wg:zones.some(z=>z.gust!=null)?windSolve(ctx,S.session.dist,zones,'max'):null};
     renderResult();
   }catch(err){S.last=null;$('#resCard').innerHTML='<div class="alarm">Beregningsfejl: '+esc(err.message)+'</div>';}
+  renderWindRes();
+  // Automatisk tilstand eller zoneantal skiftede med afstanden: tegn formularen igen, når afstandsfeltet ikke er i brug.
+  if(S.formSig!==effMode()+effN()&&!(document.activeElement&&document.activeElement.id==='s_dist'))renderSolveForm();
+  else{const s=S.session;if(effMode(s)==='zones'){const b=curBounds(s),n=effN(s);zoneIdx(n).forEach((k,i)=>{const el=$('#zspan'+k);if(el)el.textContent=spanTxt(i,b,s.dist);});
+    if(!S.zbDirty)b.forEach((v,i)=>{const el=$('#zb'+i);if(el&&document.activeElement!==el)el.value=fmtIn(v,0);});}}
   refreshViews();
+}
+function renderWindRes(){
+  const box=$('#windRes');if(!box)return;
+  if(!S.last){box.innerHTML='';return;}
+  const {ctx,sol,zones,wr,wg}=S.last,R=S.session.dist,w1=sol.wind1;
+  const line=(lbl,v)=>`<div class="line"><span class="k">${lbl}</span><span class="v">${Math.abs(v)<0.05?'0,0':lr(v,1)} <small>mil → ${Math.round(Math.abs(v)/0.1)} klik</small></span></div>`;
+  const eff=Math.abs(w1)>1e-9?wr.tot/w1:0;
+  let o=`<div class="wres res">${line('Vind',wr.tot)}${wg?line('Vindstød',wg.tot):''}
+  <div class="meta">Drift ${fmt(Math.abs(wr.tot)*R/10,0)} cm på ${fmtR(R)} m · effektiv vind ${fmt(Math.abs(eff),1)} m/s${Math.abs(eff)>=0.05?(eff>0?' fra højre':' fra venstre'):''} (fuld værdi)</div>
+  <div class="meta">±1 m/s = ±${fmt(Math.abs(w1),2)} mil — husk usikkerheden på dit kald</div>`;
+  if(zones.length>1){
+    const sum=wr.parts.reduce((a,v)=>a+Math.abs(v),0);
+    o+=`<div class="zbar">${wr.parts.map((v,i)=>`<span class="zb${i}" style="flex:${sum>1e-6?Math.abs(v)/sum:1/zones.length}"></span>`).join('')}</div>
+    <div class="zleg">${wr.parts.map((v,i)=>`<span><i class="zb${i}"></i>${esc(zones[i].name)} ${Math.abs(v)<0.005?'0,00':fmt(Math.abs(v),2)+(v>0?' H':' V')}</span>`).join('')}</div>`;
+  }
+  box.innerHTML=o+`<div class="hint" style="margin-top:6px">Ren vind. Vindholdet i resultatet lægger fast højredrift${S.session.dirU?' og retningsusikkerhed':''} oveni${wg?' og spænder fra vind til vindstød':''}.</div></div>`;
 }
 function refreshViews(){
   updateQuick();
@@ -1514,7 +1613,7 @@ function sensTxt(ctx,sol,R){
 }
 function renderResult(){
   const {ctx,sol,zones}=S.last,p=ctx.pr,R=S.session.dist,cf=p.clickFactor||1;
-  const zs=zones.length>1?`<div class="meta">Zonefølsomhed (fuld værdi): ${zoneNames(3).map((n,i)=>n.split(' ')[0]+' '+fmt(Math.abs(sol.zoneSens[i]),2)).join(' · ')} mil pr. m/s</div>`:'';
+  const zs=zones.length>1?`<div class="meta">Zonefølsomhed (fuld værdi): ${zones.map((z,i)=>z.name+' '+fmt(Math.abs(sol.zoneSens[i]),2)).join(' · ')} mil pr. m/s</div>`:'';
   $('#resCard').innerHTML=`
   ${mvWarn(p,ctx.cond.T)}${p.verified?'':'<span class="badge">verificér mod egne data</span>'}${R>700?'<span class="badge">over 700 m — egenspredning dominerer</span>':''}
   <div class="line"><span class="k">Afstand</span><span class="v">${fmtR(R)} <small>m</small></span></div>
@@ -1568,7 +1667,7 @@ function forkCell(r,side){if(side!==null){const a=[Math.abs(r.fMin),Math.abs(r.f
 function renderDope(){
   if(!S.last){$('#dopeWrap').innerHTML='<div class="alarm">Ingen gyldig løsning. Vælg ammunition eller ret input under Input.</div>';$('#dopeHead').textContent='';return;}
   const {ctx}=S.last,p=ctx.pr,rows=dopeRows(DOPE_SCREEN),z=S.last.zones,side=forkSide(rows);
-  const fork=z.length===1?`vind ${fmt(z[0].min,1)}–${fmt(z[0].max,1)} m/s kl. ${fmt(z[0].clock,1)}`:'vind 3 zoner';
+  const fork=z.length===1?`vind ${windDesc(z[0])}`:`vind ${z.length} zoner`;
   let first=true;
   const b=rows.map(r=>{if(r.out)return `<tr><td>${r.x}</td><td colspan="3" style="text-align:left;color:var(--bad)">uden for rækkevidde</td></tr>`;let cls='';if(r.mach<1.2){cls='tson'+(first?' tfirst':'');first=false;}
     return `<tr class="${cls}"><td>${r.x}</td><td class="el">${fmt(r.elevDial,1)}</td><td>${fmt(Math.abs(r.wind1),2)}</td><td>${forkCell(r,side)}</td></tr>`;}).join('');
@@ -1578,7 +1677,7 @@ function renderDope(){
 function printCard(kind){
   if(!S.last){toast('Ingen gyldig løsning at udskrive',true);return;}
   const {ctx}=S.last,p=ctx.pr,z=S.last.zones,d=new Date().toLocaleDateString('da-DK');
-  const fork=z.length===1?`vind ${fmt(z[0].min,1)}–${fmt(z[0].max,1)} m/s kl. ${fmt(z[0].clock,1)}`:'vind 3 zoner';
+  const fork=z.length===1?`vind ${windDesc(z[0])}`:`vind ${z.length} zoner`;
   const meta=`${esc(p.name)}${lotTxt(p)} · ${d}<br>V₀ ${fmt(ctx.mv,0)} · ${fmt(ctx.cond.T,0)} °C · ${fmt(ctx.cond.P,0)} hPa · nul ${p.zeroRange} m · ${ctx.cond.supp?'lyddæmper':'uden lyddæmper'}`;
   const mk=(r,f)=>`<tr class="${r.mach<1.2?'tr':''}${f?' tf':''}">`;
   let html;
@@ -1893,7 +1992,7 @@ function renderLog(keep){
   if(!p||!S.last){box.innerHTML='<div class="card"><div class="alarm">Vælg ammunition og få en gyldig løsning under Input først.</div></div>';return;}
   const {sol,ctx}=S.last,R=S.session.dist,z=S.last.zones;
   if(!keep){LG.elev=Math.round(sol.elevDial*10)/10;LG.wind=Math.round((sol.fMin+sol.fMax)/2*10)/10;}
-  const windTxt=z.length===1?`${fmt(z[0].min,1)}–${fmt(z[0].max,1)} m/s kl. ${fmt(z[0].clock,1)}${S.session.dirU?' ±'+fmt(S.session.dirU,1):''}`:'3 zoner';
+  const windTxt=z.length===1?`${windDesc(z[0])}${S.session.dirU?' ±'+fmt(S.session.dirU,1):''}`:`${z.length} zoner`;
   const recent=lgShotsForProfile(p).slice(-8).reverse();
   box.innerHTML=`
   <div class="card"><h2>Nyt skud</h2>
@@ -1926,7 +2025,7 @@ async function lgSave(){
   if(!LG.call||!LG.hit){toast('Markér både kald og træf',true);return;}
   const p=active(),{ctx,sol}=S.last,f=p.clickFactor||1;
   const rec={id:uid(),_v:SCHEMA,type:'shot',ts:Date.now(),profileId:p.id,lot:p.lot||'',ammo:p.name,dist:S.session.dist,T:ctx.cond.T,P:ctx.cond.P,supp:!!ctx.cond.supp,
-    zones:JSON.parse(JSON.stringify(S.last.zones)),dirU:S.session.dirU||0,elevSet:a.v,elevTrue:a.v/f,elevSolver:+sol.elev.toFixed(3),windSet:b.v,windMid:+((sol.fMin+sol.fMax)/2).toFixed(3),
+    zones:JSON.parse(JSON.stringify(S.last.zones)),zoneN:S.last.zones.length,zBounds:S.last.zones.length>1?S.last.zones.slice(0,-1).map(z=>Math.round(z.f1*S.session.dist)):[],windDrift:+S.last.wr.tot.toFixed(3),gustDrift:S.last.wg?+S.last.wg.tot.toFixed(3):null,dirU:S.session.dirU||0,elevSet:a.v,elevTrue:a.v/f,elevSolver:+sol.elev.toFixed(3),windSet:b.v,windMid:+((sol.fMin+sol.fMax)/2).toFixed(3),
     call:LG.call,hit:LG.hit,cold:LG.cold,note:($('#lgNote').value||'').trim()};
   if(await dbPut('shotlog',rec)){await lgLoad();LG.call=LG.hit=null;LG.mark='call';LG.cold=false;LG.note='';renderLog(false);toast('Skud gemt');}
 }
@@ -2036,7 +2135,7 @@ function wxWindCall(){
 }
 function wxApplyWind(){
   const k=wxWindCall();if(!k||k.clock==null)return;
-  S.session.windMode='single';S.session.zones[0]={min:k.min,max:k.max,clock:k.clock};S.session.windFrom=Math.round(S.session.wx.cur.wd);
+  S.session.windMode='single';S.session.windModeSet=true;S.session.zones[0]={min:k.min,max:k.max,gust:k.max>k.min?k.max:null,clock:k.clock};S.session.windFrom=Math.round(S.session.wx.cur.wd);
   saveSession();renderSolveForm();compute();go('v-solve');
   toast(`Vind ${fmt(k.min,1)}–${fmt(k.max,1)} m/s fra kl. ${fmt(k.clock,k.clock%1?1:0)} sat som kald — ret efter flag og mirage`);
 }
@@ -2189,8 +2288,10 @@ async function exportBackup(){
   sheets.push({name:'Oversigt',widths:[28,40],rows:[['The Shootingverse — backup',''],['Dato',dtx(data.ts)],['App-version',APP_VERSION],['Ammunition',P.length],['Skud i skudlog',shots.length],['',''],['Gendan','Åbn appen → Backup → Gendan fra fil, og vælg denne fil.'],['Bemærk','Fanen _backup indeholder alle data og må ikke ændres.']]});
   sheets.push({name:'Ammunition',widths:[30,12,10,10,10,12,10,10,12,12,12],rows:[['Ammunition','Lot','Vægt (grain)','G7-BK','V₀ (m/s)','V₀ målt ved °C','Nul (m)','Sigtehøjde (cm)','Klikfaktor','Æske V₀','Verificeret'],
     ...P.map(p=>[p.name,p.lot||'',p.weight,p.bc,p.mv,p.mvT??'',p.zeroRange,p.sightH,p.clickFactor,p.boxMv??'',p.verified?'ja':'nej'])]});
-  sheets.push({name:'Skudlog',widths:[17,26,10,9,7,8,20,10,10,10,10,10,10,8,7,30],rows:[['Dato','Ammunition','Lot','Afstand (m)','°C','hPa','Vindkald','Elev drejet','Vind holdt','Kald op','Kald side','Træf op','Træf side','Koldt','Lyddæmper','Note'],
-    ...shots.map(r=>{const z=r.zones&&r.zones[0];return [dtx(r.ts),r.ammo,r.lot||'',r.dist,r.T,r.P,z?(r.zones.length>1?'3 zoner':`${z.min}–${z.max} m/s kl. ${z.clock}${r.dirU?' ±'+r.dirU:''}`):'',r2(r.elevSet),sideTxt(r.windSet),r2(r.call.y),sideTxt(r.call.x),r2(r.hit.y),sideTxt(r.hit.x),r.cold?'ja':'',r.supp?'ja':'',r.note||''];})]});
+  sheets.push({name:'Skudlog',widths:[17,26,10,9,7,8,20,8,14,20,20,20,12,12,10,10,10,10,10,10,8,7,30],rows:[['Dato','Ammunition','Lot','Afstand (m)','°C','hPa','Vindkald','Zoner','Zonegrænser (m)','Nær / Én vind','Midt','Fjern','Vinddrift (mil)','Vindstød drift','Elev drejet','Vind holdt','Kald op','Kald side','Træf op','Træf side','Koldt','Lyddæmper','Note'],
+    ...shots.map(r=>{const zs=r.zones||[],z=zs[0],zd=q=>q?`${fmt(q.min,1)}${q.gust!=null?'/'+fmt(q.gust,1):(q.max>q.min?'–'+fmt(q.max,1):'')} m/s kl. ${fmt(q.clock,q.clock%1?1:0)}`:'';
+      const n=zs.length,zb=r.zBounds||[];
+      return [dtx(r.ts),r.ammo,r.lot||'',r.dist,r.T,r.P,z?(n>1?`${n} zoner`:`${zd(z)}${r.dirU?' ±'+r.dirU:''}`):'',n||'',zb.join(' / '),zd(z),n===3?zd(zs[1]):'',n>1?zd(zs[n-1]):'',r.windDrift!=null?sideTxt(r.windDrift):'',r.gustDrift!=null?sideTxt(r.gustDrift):'',r2(r.elevSet),sideTxt(r.windSet),r2(r.call.y),sideTxt(r.call.x),r2(r.hit.y),sideTxt(r.hit.x),r.cold?'ja':'',r.supp?'ja':'',r.note||''];})]});
   if(S.last){const {ctx}=S.last,rows=dopeRows([100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900]);
     sheets.push({name:'Skydetabel',widths:[10,10,10,14,8],rows:[['Afstand (m)','Elev (mil)','1 m/s (mil)','Gaffel (mil)','Mach'],...rows.map(r=>r.out?[r.x,'uden for rækkevidde']:[r.x,r2(r.elevDial),r2(Math.abs(r.wind1)),forkTxt(r.fMin,r.fMax),r2(r.mach)]),[],[`${ctx.pr.name}${ctx.pr.lot?' · lot '+ctx.pr.lot:''} · V₀ ${fmt(ctx.mv,0)} · ${fmt(ctx.cond.T,0)} °C · ${fmt(ctx.cond.P,0)} hPa`]]});}
   const json=JSON.stringify(data),chunks=[];for(let i=0;i<json.length;i+=30000)chunks.push([json.slice(i,i+30000)]);
@@ -2426,6 +2527,7 @@ async function init(){
     const st=await dbGet('settings','settings');
     if(st){Object.assign(S.settings,st.value||{});S.activeId=st.activeId;}
     const ss=await dbGet('settings','session');if(ss&&ss.value)Object.assign(S.session,ss.value);
+    sessNorm(S.session);
   }
   if(!S.profiles.find(p=>p.id===S.activeId))S.activeId=S.profiles.length?S.profiles[0].id:null;
   if(DB)await saveSettings();
